@@ -3,6 +3,8 @@
 from modules.loshape import *
 
 import sys
+from matplotlib import pyplot as plt
+
 
 
 fname_conf = sys.argv[1]
@@ -17,6 +19,7 @@ for l in f:
   ###
   if key == '!run_name':  run_name = ll[1]
   elif key == '!cul_name':  cul_name = ll[1]
+  elif key == '!ougfname1':  ougfname1 = ll[1]
   elif key == '!vid':
     for l in f:
       l = l.strip()
@@ -58,6 +61,41 @@ for l in f:
   #
 f.close()
 ############################################
+
+
+n_culay = len(culay)
+
+
+
+##################################################################
+### !graph #######################################################
+# The plain layout with nothing added.
+fig = plt.figure()
+
+for i in range(n_culay):
+  culay[i].plot()
+
+
+ca = fig.gca()
+
+
+# plt.xlim(-10, atrack[0].im_w+10 )
+# plt.ylim(-10, atrack[0].im_h+10 )
+plt.gca().set_aspect('equal', adjustable='box')
+
+plt.title("scale:  mm")
+
+# plt.savefig(oudir+'/'+ougfname1)
+plt.savefig(ougfname1)
+
+
+
+
+
+##################################################################
+### !graph #######################################################
+# End of graphs.
+##################################################################
 
 
 
