@@ -51,6 +51,14 @@ for l in f:
         if v.startswith('#'):  continue
         vid.append( int(v) )
         fafov.append( c_fafov( int(v) ) )
+  elif key == '!standard_flow_axis':
+    i = -1
+    for l in f:
+      l = l.strip()
+      if len(l) == 0:  break
+      if l[0] == '#':  continue
+      i += 1
+      fafov[i].read_standard_flow_axis(l)
   elif key == '!culture_layout':
     culay = []
     i = -1

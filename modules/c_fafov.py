@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 
-
+import numpy as np
 from matplotlib import pyplot as plt
+import math
 
 
 ##################################################################
@@ -10,6 +11,12 @@ class c_fafov:
   def __init__(self, vid):
     self.vid = vid
     self.vidname = 'v{0:03d}'.format( self.vid )
+  #
+  def read_standard_flow_axis(self, l):
+    ll = l.split(' ')
+    # sfa:  standard flow axis
+    sfa_ux = float(ll[0])
+    sfa_uy = float(ll[1])
   #
   def set_dir_traspe_1(self, dir):
     self.dir_traspe_1 = dir
@@ -44,9 +51,19 @@ class c_fafov:
     #
     self.vec_dx_mm = []
     self.vec_dy_mm = []
+    #
+    self.vec_mag_max_mm = 0.0
+    #
     for i in range(self.n_vec):
       self.vec_dx_mm.append( self.vec_dx_um[i] / 1000.0 )
       self.vec_dy_mm.append( self.vec_dy_um[i] / 1000.0 )
+      #
+      mag = math.hypot(self.vec_dx_mm[i], self.vec_dy_mm[i])
+      if mag > self.vec_mag_max_mm:
+        self.vec_mag_max_mm = mag
+    #
+    self.vec_mean_dx_mm = np.mean( self.vec_dx_mm )
+    self.vec_mean_dy_mm = np.mean( self.vec_dy_mm )
     #
   #
   def plot_vecs_on_layout(self):
@@ -65,11 +82,18 @@ class c_fafov:
       y.append( self.fov_pos_y + dy[i] )
       y.append( None )
     plt.plot(x, y, color='#888888')
-  #
+    #
+    mdx = self.vec_mean_dx_mm * self.scale_fov_to_layout
+    mdy = self.vec_mean_dy_mm * self.scale_fov_to_layout
+    mx = [ self.fov_pos_x, self.fov_pos_x+mdx ]
+    my = [ self.fov_pos_y, self.fov_pos_y+mdy ]
+    plt.plot(mx, my, color='#ff0000')
+    #
   #
   # class !end
 ##################################################################
 
+    self.vec_mean_dy_mm = np.mean( self.vec_dy_mm )
 
 
 
