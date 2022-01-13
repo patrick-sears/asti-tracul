@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from modules.loshape import *
+from modules.c_fafov import c_fafov
 
 import sys
 from matplotlib import pyplot as plt
@@ -19,10 +20,13 @@ for l in f:
   ###
   if key == '!run_name':  run_name = ll[1]
   elif key == '!cul_name':  cul_name = ll[1]
+  elif key == '!dir_traspe_1':  dir_traspe_1 = ll[1]
   elif key == '!ougfname1':  ougfname1 = ll[1]
+  elif key == '!scale_fov_to_layout':  scale_fov_to_layout = float(ll[1])
   elif key == '!fov_pos':
     fov_pos_x = []
     fov_pos_y = []
+    i = -1
     for l in f:
       l = l.strip()
       if len(l) == 0:  break
@@ -30,17 +34,23 @@ for l in f:
       ll = l.split(' ')
       fov_pos_x.append( float(ll[0]) )
       fov_pos_y.append( float(ll[1]) )
+      #
+      i += 1
+      fafov[i].set_fov_pos( float(ll[0]), float(ll[1]) )
   elif key == '!vid':
+    fafov = []
+    vid = []
+    #
     for l in f:
       l = l.strip()
       if len(l) == 0:  break
       if l[0] == '#':  continue
       ll = l.split(' ')
       #
-      vid = []
       for v in ll:
         if v.startswith('#'):  continue
         vid.append( int(v) )
+        fafov.append( c_fafov( int(v) ) )
   elif key == '!culture_layout':
     culay = []
     i = -1
@@ -75,11 +85,18 @@ f.close()
 
 n_culay = len(culay)
 
+n_fafov = len(fafov)
+for i in range(n_fafov):
+  fafov[i].set_dir_traspe_1(dir_traspe_1)
+  fafov[i].set_scale_fov_to_layout(scale_fov_to_layout)
+  fafov[i].load_vecs()
+  fafov[i].pro1()
+
 
 
 ##################################################################
 ### !graph #######################################################
-# The plain layout with nothing added.
+# The layout.
 fig = plt.figure()
 
 for i in range(n_culay):
@@ -93,6 +110,8 @@ plt.plot(fov_pos_x, fov_pos_y,
   markersize=12.0
   )
 
+for i in range(n_fafov):
+  fafov[i].plot_vecs_on_layout()
 
 ca = fig.gca()
 # plt.xlim(-10, atrack[0].im_w+10 )
