@@ -21,6 +21,7 @@ for l in f:
   if key == '!run_name':  run_name = ll[1]
   elif key == '!cul_name':  cul_name = ll[1]
   elif key == '!dir_traspe_1':  dir_traspe_1 = ll[1]
+  elif key == '!oufname1':  oufname1 = ll[1]
   elif key == '!ougfname1':  ougfname1 = ll[1]
   elif key == '!scale_fov_to_layout':  scale_fov_to_layout = float(ll[1])
   elif key == '!standard_flow_axis_mag_on_graph':
@@ -103,6 +104,25 @@ for i in range(n_fafov):
   fafov[i].load_vecs()
   fafov[i].pro1()
 
+
+
+#######################################################
+# oufname1 data
+ou = ''
+ou += 'i: i_fov,\n'
+ou += 'mean_ux mean_uy\n'
+ou += '-----------------------\n'
+ou += 'i    mean_ux   mean_uy\n'
+ou += '---  --------  --------\n'
+for i in range(n_fafov):
+  ou += '{0:3d}'.format(i)
+  ou += '  {0:8.5f}'.format( fafov[i].mean_ux_um )
+  ou += '  {0:8.5f}'.format( fafov[i].mean_uy_um )
+  ou += '\n'
+fz = open(oufname1, 'w')
+fz.write(ou)
+fz.close()
+#######################################################
 
 
 ##################################################################
