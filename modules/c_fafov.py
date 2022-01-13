@@ -53,18 +53,27 @@ class c_fafov:
     self.vec_dx_mm = []
     self.vec_dy_mm = []
     #
-    self.vec_mag_max_mm = 0.0
+    self.vec_mag_max_um = 0.0
     #
     for i in range(self.n_vec):
       self.vec_dx_mm.append( self.vec_dx_um[i] / 1000.0 )
       self.vec_dy_mm.append( self.vec_dy_um[i] / 1000.0 )
       #
-      mag = math.hypot(self.vec_dx_mm[i], self.vec_dy_mm[i])
-      if mag > self.vec_mag_max_mm:
-        self.vec_mag_max_mm = mag
+      mag_um = math.hypot(self.vec_dx_um[i], self.vec_dy_um[i])
+      if mag_um > self.vec_mag_max_um:
+        self.vec_mag_max_um = mag_um
+    #
+    self.vec_mag_max_mm = self.vec_mag_max_um / 1000.0
     #
     self.vec_mean_dx_mm = np.mean( self.vec_dx_mm )
     self.vec_mean_dy_mm = np.mean( self.vec_dy_mm )
+    #
+    self.vec_mean_dx_um = np.mean( self.vec_dx_um )
+    self.vec_mean_dy_um = np.mean( self.vec_dy_um )
+    self.vec_mean_mag_um = math.hypot( self.vec_mean_dx_um, self.vec_mean_dy_um )
+    #
+    self.mean_ux_um = self.vec_mean_dx_um / self.vec_mean_mag_um
+    self.mean_uy_um = self.vec_mean_dy_um / self.vec_mean_mag_um
     #
   #
   def plot_vecs_on_layout(self):
