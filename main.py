@@ -23,6 +23,8 @@ for l in f:
   elif key == '!dir_traspe_1':  dir_traspe_1 = ll[1]
   elif key == '!ougfname1':  ougfname1 = ll[1]
   elif key == '!scale_fov_to_layout':  scale_fov_to_layout = float(ll[1])
+  elif key == '!standard_flow_axis_mag_on_graph':
+    standard_flow_axis_mag_on_graph = float(ll[1])
   elif key == '!fov_pos':
     fov_pos_x = []
     fov_pos_y = []
@@ -95,6 +97,7 @@ n_culay = len(culay)
 
 n_fafov = len(fafov)
 for i in range(n_fafov):
+  fafov[i].sfa_mag_on_graph = standard_flow_axis_mag_on_graph
   fafov[i].set_dir_traspe_1(dir_traspe_1)
   fafov[i].set_scale_fov_to_layout(scale_fov_to_layout)
   fafov[i].load_vecs()

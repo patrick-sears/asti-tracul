@@ -11,12 +11,13 @@ class c_fafov:
   def __init__(self, vid):
     self.vid = vid
     self.vidname = 'v{0:03d}'.format( self.vid )
+    self.sfa_on_mag = None
   #
   def read_standard_flow_axis(self, l):
     ll = l.split(' ')
     # sfa:  standard flow axis
-    sfa_ux = float(ll[0])
-    sfa_uy = float(ll[1])
+    self.sfa_ux = float(ll[0])
+    self.sfa_uy = float(ll[1])
   #
   def set_dir_traspe_1(self, dir):
     self.dir_traspe_1 = dir
@@ -83,12 +84,18 @@ class c_fafov:
       y.append( None )
     plt.plot(x, y, color='#888888')
     #
+    # "/1000" because in um/s.
+    madx = self.sfa_ux * (self.sfa_mag_on_graph/1000) * self.scale_fov_to_layout
+    mady = self.sfa_uy * (self.sfa_mag_on_graph/1000) * self.scale_fov_to_layout
+    max = [ self.fov_pos_x, self.fov_pos_x+madx ]
+    may = [ self.fov_pos_y, self.fov_pos_y+mady ]
+    plt.plot(max, may, color='#008800')
+    #
     mdx = self.vec_mean_dx_mm * self.scale_fov_to_layout
     mdy = self.vec_mean_dy_mm * self.scale_fov_to_layout
     mx = [ self.fov_pos_x, self.fov_pos_x+mdx ]
     my = [ self.fov_pos_y, self.fov_pos_y+mdy ]
     plt.plot(mx, my, color='#ff0000')
-    #
   #
   # class !end
 ##################################################################
