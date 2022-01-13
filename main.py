@@ -20,6 +20,16 @@ for l in f:
   if key == '!run_name':  run_name = ll[1]
   elif key == '!cul_name':  cul_name = ll[1]
   elif key == '!ougfname1':  ougfname1 = ll[1]
+  elif key == '!fov_pos':
+    fov_pos_x = []
+    fov_pos_y = []
+    for l in f:
+      l = l.strip()
+      if len(l) == 0:  break
+      if l[0] == '#':  continue
+      ll = l.split(' ')
+      fov_pos_x.append( float(ll[0]) )
+      fov_pos_y.append( float(ll[1]) )
   elif key == '!vid':
     for l in f:
       l = l.strip()
@@ -75,10 +85,16 @@ fig = plt.figure()
 for i in range(n_culay):
   culay[i].plot()
 
+plt.plot(fov_pos_x, fov_pos_y,
+  linestyle='none',
+  marker='s',
+  markerfacecolor='none',
+  markeredgecolor='#000000',
+  markersize=12.0
+  )
+
 
 ca = fig.gca()
-
-
 # plt.xlim(-10, atrack[0].im_w+10 )
 # plt.ylim(-10, atrack[0].im_h+10 )
 plt.gca().set_aspect('equal', adjustable='box')
