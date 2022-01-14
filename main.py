@@ -125,8 +125,8 @@ ou += 'i    mean_ux   mean_uy\n'
 ou += '---  --------  --------\n'
 for i in range(n_fafov):
   ou += '{0:3d}'.format(i)
-  ou += '  {0:8.5f}'.format( fafov[i].mean_ux_um )
-  ou += '  {0:8.5f}'.format( fafov[i].mean_uy_um )
+  ou += '  {0:8.5f}'.format( fafov[i].mean_ux )
+  ou += '  {0:8.5f}'.format( fafov[i].mean_uy )
   ou += '\n'
 fz = open(oufname1, 'w')
 fz.write(ou)

@@ -76,8 +76,9 @@ class c_fafov:
     self.vec_mean_dy_um = np.mean( self.vec_dy_um )
     self.vec_mean_mag_um = math.hypot( self.vec_mean_dx_um, self.vec_mean_dy_um )
     #
-    self.mean_ux_um = self.vec_mean_dx_um / self.vec_mean_mag_um
-    self.mean_uy_um = self.vec_mean_dy_um / self.vec_mean_mag_um
+    # 
+    self.mean_ux = self.vec_mean_dx_um / self.vec_mean_mag_um
+    self.mean_uy = self.vec_mean_dy_um / self.vec_mean_mag_um
     #
   #
   def plot_vecs_on_layout(self):
