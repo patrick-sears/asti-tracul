@@ -101,6 +101,8 @@ class c_fafov:
     self.sfa_v_x = self.vec_mean_dx_um * self.sfa_ux
     self.sfa_v_y = self.vec_mean_dy_um * self.sfa_uy
     self.sfa_v_mag = math.hypot(self.sfa_v_x, self.sfa_v_y)
+    # Note that sfa_v_mag will be positive even if the sfa_v
+    # is in the opposite direction from the sfa_u vector.
     #
   #
   def plot_vecs_on_layout(self):

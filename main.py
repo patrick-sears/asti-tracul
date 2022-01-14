@@ -150,13 +150,17 @@ glob_v_val /= n_fafov
 ou = ''
 ou += 'i: i_fov,\n'
 ou += 'mean_ux mean_uy\n'
+ou += 'sfa_mag:  sfa_v_mag\n'
+ou += 'sfa_vuv:  sfa_vu_val\n'
 ou += '-----------------------\n'
-ou += 'i    mean_ux   mean_uy\n'
-ou += '---  --------  --------\n'
+ou += 'i    mean_ux   mean_uy   sfa_mag   sfa_vuv\n'
+ou += '---  --------  --------  --------  --------\n'
 for i in range(n_fafov):
   ou += '{0:3d}'.format(i)
   ou += '  {0:8.5f}'.format( fafov[i].mean_ux )
   ou += '  {0:8.5f}'.format( fafov[i].mean_uy )
+  ou += '  {0:8.3f}'.format( fafov[i].sfa_v_mag )
+  ou += '  {0:8.3f}'.format( fafov[i].sfa_vu_val )
   ou += '\n'
 fz = open(oufname1, 'w')
 fz.write(ou)
