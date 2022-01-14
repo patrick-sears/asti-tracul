@@ -115,6 +115,35 @@ for i in range(n_fafov):
 
 
 
+############################################
+# Calculate global direction and speed in
+# global direction.
+# Global direction for an mctd is between +1 (2pi.u+)
+# or -1 (2pi.u-).  The absolute value is less than
+# 1 for less than perfect alignment.
+# vu is a vector calculated from unit vectors.
+# It might be a mean, or a component of a unit vector
+# along another.
+# In this case it's a component.
+glob_vu_mag = 0.0
+for i in range(n_fafov):
+  glob_vu_mag += fafov[i].sfa_vu_val
+glob_vu_mag /= n_fafov
+glob_vu_dir = 1
+if glob_vu_mag < 0:  glob_vu_dir = -1
+
+# Find the component of the velocity direction in
+# the global direction as defined by unit vectors.
+# Note it can be negative.
+glob_v_val = 0.0
+for i in range(n_fafov):
+  mag = fafov[i].sfa_v_mag
+  if fafov[i].sfa_vu_val < 0:  mag *= -1
+  glob_v_val += mag
+glob_v_val /= n_fafov
+############################################
+
+
 #######################################################
 # oufname1 data
 ou = ''

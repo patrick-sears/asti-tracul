@@ -76,9 +76,31 @@ class c_fafov:
     self.vec_mean_dy_um = np.mean( self.vec_dy_um )
     self.vec_mean_mag_um = math.hypot( self.vec_mean_dx_um, self.vec_mean_dy_um )
     #
-    # 
     self.mean_ux = self.vec_mean_dx_um / self.vec_mean_mag_um
     self.mean_uy = self.vec_mean_dy_um / self.vec_mean_mag_um
+    #
+    # Calculate the component of the unit vector in the
+    # direction of the standard flow axis.
+    # This is a measure of how well aligned the flow is
+    # with the standard flow axis.
+    # A "vu" is a vector calculated from unit vectors.
+    # So it has no units but does not necessarily have
+    # a magnitude of 1.
+    # dot product...
+    vu_x = self.mean_ux * self.sfa_ux
+    vu_y = self.mean_uy * self.sfa_uy
+    self.sfa_vu_val = vu_x + vu_y
+    # sfa_vu_val:  It's the component of the mean direction
+    # along the sfa.  It's how well the flow is aligned
+    # ignoring speed.  It's range is [-1, +1].  Note that
+    # an sfa_vu_val of -1 indicates perfectly aligned flow
+    # in the direction opposite from the sfa.
+    #
+    # Calculate the component of the velocity in the direction
+    # of the sfa.
+    self.sfa_v_x = self.vec_mean_dx_um * self.sfa_ux
+    self.sfa_v_y = self.vec_mean_dy_um * self.sfa_uy
+    self.sfa_v_mag = math.hypot(self.sfa_v_x, self.sfa_v_y)
     #
   #
   def plot_vecs_on_layout(self):
