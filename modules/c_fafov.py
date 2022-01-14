@@ -11,7 +11,11 @@ class c_fafov:
   def __init__(self, vid):
     self.vid = vid
     self.vidname = 'v{0:03d}'.format( self.vid )
-    self.sfa_on_mag = None
+    # self.sfa_on_mag = None
+    self.sbar_len = None  # um/s
+    self.sbar_len_mm = None
+    self.sbar_x1 = None
+    self.sbar_y1 = None
   #
   def read_standard_flow_axis(self, l):
     ll = l.split(' ')
@@ -94,11 +98,20 @@ class c_fafov:
     plt.plot(x, y, color='#888888')
     #
     # "/1000" because in um/s.
-    madx = self.sfa_ux * (self.sfa_mag_on_graph/1000) * self.scale_fov_to_layout
-    mady = self.sfa_uy * (self.sfa_mag_on_graph/1000) * self.scale_fov_to_layout
-    max = [ self.fov_pos_x, self.fov_pos_x+madx ]
-    may = [ self.fov_pos_y, self.fov_pos_y+mady ]
-    plt.plot(max, may, color='#008800')
+    ### madx = self.sfa_ux * (self.sfa_mag_on_graph/1000) * self.scale_fov_to_layout
+    ### mady = self.sfa_uy * (self.sfa_mag_on_graph/1000) * self.scale_fov_to_layout
+    ### max = [ self.fov_pos_x, self.fov_pos_x+madx ]
+    ### may = [ self.fov_pos_y, self.fov_pos_y+mady ]
+    ### plt.plot(max, may, color='#008800')
+    #
+    # um/s scale bar.
+    self.sbar_len_mm = self.sbar_len * self.scale_fov_to_layout / 1000.0
+    sbar_x2 = self.sbar_x1 + self.sbar_len_mm
+    sbar_y2 = self.sbar_y1
+    sbar_x = [ self.sbar_x1, sbar_x2 ]
+    sbar_y = [ self.sbar_y1, sbar_y2 ]
+    plt.plot( sbar_x, sbar_y, color='#009900' )
+    #
     #
     mdx = self.vec_mean_dx_mm * self.scale_fov_to_layout
     mdy = self.vec_mean_dy_mm * self.scale_fov_to_layout

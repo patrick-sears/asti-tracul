@@ -24,8 +24,13 @@ for l in f:
   elif key == '!oufname1':  oufname1 = ll[1]
   elif key == '!ougfname1':  ougfname1 = ll[1]
   elif key == '!scale_fov_to_layout':  scale_fov_to_layout = float(ll[1])
-  elif key == '!standard_flow_axis_mag_on_graph':
-    standard_flow_axis_mag_on_graph = float(ll[1])
+  # elif key == '!standard_flow_axis_mag_on_graph':
+  #   standard_flow_axis_mag_on_graph = float(ll[1])
+  elif key == '!vovg_scale_bar_length':
+    vovg_scale_bar_length = float(ll[1])
+  elif key == '!vovg_scale_bar_pos':
+    vovg_scale_bar_pos_x = float(ll[1])
+    vovg_scale_bar_pos_y = float(ll[2])
   elif key == '!fov_pos':
     fov_pos_x = []
     fov_pos_y = []
@@ -98,7 +103,11 @@ n_culay = len(culay)
 
 n_fafov = len(fafov)
 for i in range(n_fafov):
-  fafov[i].sfa_mag_on_graph = standard_flow_axis_mag_on_graph
+  # fafov[i].sfa_mag_on_graph = standard_flow_axis_mag_on_graph
+  fafov[i].sbar_len = vovg_scale_bar_length
+  fafov[i].sbar_x1 = vovg_scale_bar_pos_x
+  fafov[i].sbar_y1 = vovg_scale_bar_pos_y
+  #
   fafov[i].set_dir_traspe_1(dir_traspe_1)
   fafov[i].set_scale_fov_to_layout(scale_fov_to_layout)
   fafov[i].load_vecs()
@@ -127,7 +136,7 @@ fz.close()
 
 ##################################################################
 ### !graph #######################################################
-# The layout.
+# Graph 1 -- The layout.
 fig = plt.figure()
 
 for i in range(n_culay):
