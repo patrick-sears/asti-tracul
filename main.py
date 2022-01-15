@@ -37,6 +37,7 @@ for l in f:
     vovg_sbar_x1 = float(ll[1]) / 1E3
     vovg_sbar_y1 = float(ll[2]) / 1E3
   elif key == '!fov_pos':
+    # fov pos entered in mm, convert to m.
     fov_pos_x = []
     fov_pos_y = []
     i = -1
@@ -45,11 +46,13 @@ for l in f:
       if len(l) == 0:  break
       if l[0] == '#':  continue
       ll = l.split(' ')
-      fov_pos_x.append( float(ll[0]) )
-      fov_pos_y.append( float(ll[1]) )
+      fpx = float(ll[0]) / 1E3
+      fpy = float(ll[1]) / 1E3
+      fov_pos_x.append( fpx )
+      fov_pos_y.append( fpy )
       #
       i += 1
-      fafov[i].set_fov_pos( float(ll[0]), float(ll[1]) )
+      fafov[i].set_fov_pos( fpx, fpy )
   elif key == '!vid':
     fafov = []
     vid = []
@@ -199,7 +202,12 @@ fig = plt.figure()
 for i in range(n_culay):
   culay[i].plot()
 
-plt.plot(fov_pos_x, fov_pos_y,
+fpx = []
+fpy = []
+for i in range(n_fafov):  # convert m->mm
+  fpx.append(fov_pos_x[i] * 1E3)
+  fpy.append(fov_pos_y[i] * 1E3)
+plt.plot(fpx, fpy,
   linestyle='none',
   marker='s',
   markerfacecolor='none',

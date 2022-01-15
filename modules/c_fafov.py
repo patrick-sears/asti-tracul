@@ -113,6 +113,11 @@ class c_fafov:
     #
   #
   def plot_vecs_on_layout(self):
+    # fp:  fov pos for graphing (in mm)
+    fpx = self.fov_pos_x * 1E3
+    fpy = self.fov_pos_y * 1E3
+    #
+    # Plot the velocity vectors.
     dx = []
     dy = []
     for i in range(self.n_vec):
@@ -121,41 +126,36 @@ class c_fafov:
     x = []
     y = []
     for i in range(self.n_vec):
-      x.append( self.fov_pos_x )
-      x.append( self.fov_pos_x + dx[i] )
+      x.append( fpx )
+      x.append( fpx + dx[i] )
       x.append( None )
-      y.append( self.fov_pos_y )
-      y.append( self.fov_pos_y + dy[i] )
+      y.append( fpy )
+      y.append( fpy + dy[i] )
       y.append( None )
     plt.plot(x, y, color='#888888')
     #
     ###############################################
+    # Plot the scale bar for velocity on the distance
+    # graph.
     # value m/s, for graphing will be um/s scale bar.
     # length m, for graphing will be mm.
-    #############
-    # temporary kluge
-    # scale in [mm]/[um/s]
-    # SI:  [m]/[m/s]
-    ftl_SI = self.scale_fov_to_layout * 1E6 / 1E3
-    # self.sbar_len = self.sbar_val * self.scale_fov_to_layout
-    # self.sbar_len = self.sbar_val * ftl_SI
     self.sbar_len = self.sbar_val * self.vovg_scale
-    #############
-    len = self.sbar_len * 1000  # convert m to mm.
-    print("sbar_val (um/s): ", self.sbar_val*1E6)
-    print("len: ", len)
-    x1 = self.sbar_x1 * 1000  # Convert m -> mm
-    y1 = self.sbar_y1 * 1000  # Convert m -> mm
+    # Convert m to mm.
+    len = self.sbar_len * 1E3
+    x1 = self.sbar_x1 * 1E3
+    y1 = self.sbar_y1 * 1E3
+    #
     x = [ x1, x1+len ]
     y = [ y1, y1 ]
     plt.plot( x, y, color='#009900' )
     ###############################################
     #
+    # Plot mean vectors.
     # vec_mean_dx_mm is in mm/s
     mdx = self.vec_mean_dx_mm * self.scale_fov_to_layout
     mdy = self.vec_mean_dy_mm * self.scale_fov_to_layout
-    mx = [ self.fov_pos_x, self.fov_pos_x+mdx ]
-    my = [ self.fov_pos_y, self.fov_pos_y+mdy ]
+    mx = [ fpx, fpx+mdx ]
+    my = [ fpy, fpy+mdy ]
     plt.plot(mx, my, color='#ff0000')
   #
   # class !end
