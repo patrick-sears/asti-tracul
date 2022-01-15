@@ -11,17 +11,17 @@ class c_fafov:
   def __init__(self, vid):
     self.vid = vid
     self.vidname = 'v{0:03d}'.format( self.vid )
-    # self.sfa_on_mag = None
     self.sbar_len = None  # um/s
     self.sbar_len_mm = None
     self.sbar_x1 = None
     self.sbar_y1 = None
   #
-  def read_standard_flow_axis(self, l):
-    ll = l.split(' ')
-    # sfa:  standard flow axis
-    self.sfa_ux = float(ll[0])
-    self.sfa_uy = float(ll[1])
+  def read_sys2_basis(self, l):
+    ll = l.split(';')
+    self.sys2_e1x = float(ll[0].strip())
+    self.sys2_e1y = float(ll[1].strip())
+    self.sys2_e2x = float(ll[2].strip())
+    self.sys2_e2y = float(ll[3].strip())
   #
   def set_dir_traspe_1(self, dir):
     self.dir_traspe_1 = dir
@@ -80,29 +80,29 @@ class c_fafov:
     self.mean_uy = self.vec_mean_dy_um / self.vec_mean_mag_um
     #
     # Calculate the component of the unit vector in the
-    # direction of the standard flow axis.
+    # direction of the standard flow axis, sys2_e1.
     # This is a measure of how well aligned the flow is
     # with the standard flow axis.
     # A "vu" is a vector calculated from unit vectors.
     # So it has no units but does not necessarily have
     # a magnitude of 1.
     # dot product...
-    vu_x = self.mean_ux * self.sfa_ux
-    vu_y = self.mean_uy * self.sfa_uy
-    self.sfa_vu_val = vu_x + vu_y
-    # sfa_vu_val:  It's the component of the mean direction
-    # along the sfa.  It's how well the flow is aligned
+    sys2_vu_x = self.mean_ux * self.sys2_e1x
+    sys2_vu_y = self.mean_uy * self.sys2_e1y
+    self.sys2_vu_val = sys2_vu_x + sys2_vu_y
+    # sys2_vu_val:  It's the component of the mean direction
+    # along the sys2_e1.  It's how well the flow is aligned
     # ignoring speed.  It's range is [-1, +1].  Note that
-    # an sfa_vu_val of -1 indicates perfectly aligned flow
-    # in the direction opposite from the sfa.
+    # an sy2_vu_val of -1 indicates perfectly aligned flow
+    # in the direction opposite from the sy2_e1.
     #
     # Calculate the component of the velocity in the direction
-    # of the sfa.
-    self.sfa_v_x = self.vec_mean_dx_um * self.sfa_ux
-    self.sfa_v_y = self.vec_mean_dy_um * self.sfa_uy
-    self.sfa_v_mag = math.hypot(self.sfa_v_x, self.sfa_v_y)
-    # Note that sfa_v_mag will be positive even if the sfa_v
-    # is in the opposite direction from the sfa_u vector.
+    # of the sys2_e1.
+    self.sys2_v_x = self.vec_mean_dx_um * self.sys2_e1x
+    self.sys2_v_y = self.vec_mean_dy_um * self.sys2_e1y
+    self.sys2_v_mag = math.hypot(self.sys2_v_x, self.sys2_v_y)
+    # Note that sys2_v_mag will be positive even if the sys2_v
+    # is in the opposite direction from the sys2_u vector.
     #
   #
   def plot_vecs_on_layout(self):
@@ -121,13 +121,6 @@ class c_fafov:
       y.append( self.fov_pos_y + dy[i] )
       y.append( None )
     plt.plot(x, y, color='#888888')
-    #
-    # "/1000" because in um/s.
-    ### madx = self.sfa_ux * (self.sfa_mag_on_graph/1000) * self.scale_fov_to_layout
-    ### mady = self.sfa_uy * (self.sfa_mag_on_graph/1000) * self.scale_fov_to_layout
-    ### max = [ self.fov_pos_x, self.fov_pos_x+madx ]
-    ### may = [ self.fov_pos_y, self.fov_pos_y+mady ]
-    ### plt.plot(max, may, color='#008800')
     #
     # um/s scale bar.
     self.sbar_len_mm = self.sbar_len * self.scale_fov_to_layout / 1000.0

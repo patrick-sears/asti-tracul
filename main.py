@@ -25,8 +25,6 @@ for l in f:
   elif key == '!oufname2':  oufname2 = ll[1]
   elif key == '!ougfname1':  ougfname1 = ll[1]
   elif key == '!scale_fov_to_layout':  scale_fov_to_layout = float(ll[1])
-  # elif key == '!standard_flow_axis_mag_on_graph':
-  #   standard_flow_axis_mag_on_graph = float(ll[1])
   elif key == '!vovg_scale_bar_length':
     vovg_scale_bar_length = float(ll[1])
   elif key == '!vovg_scale_bar_pos':
@@ -60,14 +58,14 @@ for l in f:
         if v.startswith('#'):  continue
         vid.append( int(v) )
         fafov.append( c_fafov( int(v) ) )
-  elif key == '!standard_flow_axis':
+  elif key == '!sys2_basis':
     i = -1
     for l in f:
       l = l.strip()
       if len(l) == 0:  break
       if l[0] == '#':  continue
       i += 1
-      fafov[i].read_standard_flow_axis(l)
+      fafov[i].read_sys2_basis(l)
   elif key == '!culture_layout':
     culay = []
     i = -1
@@ -104,7 +102,6 @@ n_culay = len(culay)
 
 n_fafov = len(fafov)
 for i in range(n_fafov):
-  # fafov[i].sfa_mag_on_graph = standard_flow_axis_mag_on_graph
   fafov[i].sbar_len = vovg_scale_bar_length
   fafov[i].sbar_x1 = vovg_scale_bar_pos_x
   fafov[i].sbar_y1 = vovg_scale_bar_pos_y
@@ -128,7 +125,7 @@ for i in range(n_fafov):
 # In this case it's a component.
 glob_vu_mag = 0.0
 for i in range(n_fafov):
-  glob_vu_mag += fafov[i].sfa_vu_val
+  glob_vu_mag += fafov[i].sys2_vu_val
 glob_vu_mag /= n_fafov
 glob_vu_dir = 1
 if glob_vu_mag < 0:  glob_vu_dir = -1
@@ -138,8 +135,8 @@ if glob_vu_mag < 0:  glob_vu_dir = -1
 # Note it can be negative.
 glob_v_val = 0.0
 for i in range(n_fafov):
-  mag = fafov[i].sfa_v_mag
-  if fafov[i].sfa_vu_val < 0:  mag *= -1
+  mag = fafov[i].sys2_v_mag
+  if fafov[i].sys2_vu_val < 0:  mag *= -1
   glob_v_val += mag
 glob_v_val /= n_fafov
 ############################################
@@ -152,17 +149,17 @@ glob_v_val /= n_fafov
 ou = ''
 ou += 'i: i_fov,\n'
 ou += 'mean_ux mean_uy\n'
-ou += 'sfa_mag:  sfa_v_mag\n'
-ou += 'sfa_vuv:  sfa_vu_val\n'
+ou += 'sys2_mag:  sys2_v_mag\n'
+ou += 'sys2_vuv:  sys2_vu_val\n'
 ou += '-----------------------\n'
-ou += 'i    mean_ux   mean_uy   sfa_mag   sfa_vuv\n'
+ou += 'i    mean_ux   mean_uy   sys2_mag  sys2_vuv\n'
 ou += '---  --------  --------  --------  --------\n'
 for i in range(n_fafov):
   ou += '{0:3d}'.format(i)
   ou += '  {0:8.5f}'.format( fafov[i].mean_ux )
   ou += '  {0:8.5f}'.format( fafov[i].mean_uy )
-  ou += '  {0:8.3f}'.format( fafov[i].sfa_v_mag )
-  ou += '  {0:8.3f}'.format( fafov[i].sfa_vu_val )
+  ou += '  {0:8.3f}'.format( fafov[i].sys2_v_mag )
+  ou += '  {0:8.3f}'.format( fafov[i].sys2_vu_val )
   ou += '\n'
 fz = open(oufname1, 'w')
 fz.write(ou)
