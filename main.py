@@ -168,7 +168,7 @@ for i in range(n_fafov):
   ou += '{0:3d}'.format(i)
   ou += '  {0:8.5f}'.format( fafov[i].mean_ux )
   ou += '  {0:8.5f}'.format( fafov[i].mean_uy )
-  ou += '  {0:8.3f}'.format( fafov[i].sys2_v_mag )
+  ou += '  {0:8.3f}'.format( fafov[i].sys2_v_mag *1E6 ) # m/s->um/s
   ou += '  {0:8.3f}'.format( fafov[i].sys2_vu_val )
   ou += '\n'
 fz = open(oufname1, 'w')
@@ -183,7 +183,7 @@ ou = ''
 ou += '\n'
 ou += 'glob_vu_mag (1):    {0:8.3f}\n'.format( glob_vu_mag )
 ou += 'glob_vu_dir (1):    {0:8.3f}\n'.format( glob_vu_dir )
-ou += 'glob_v_val (um/s):  {0:8.3f}\n'.format( glob_v_val )
+ou += 'glob_v_val (um/s):  {0:8.3f}\n'.format( glob_v_val *1E6 ) # m/s->um/s
 ou += '\n'
 fz = open(oufname2, 'w')
 fz.write(ou)
