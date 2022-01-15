@@ -25,11 +25,17 @@ for l in f:
   elif key == '!oufname2':  oufname2 = ll[1]
   elif key == '!ougfname1':  ougfname1 = ll[1]
   elif key == '!scale_fov_to_layout':  scale_fov_to_layout = float(ll[1])
-  elif key == '!vovg_scale_bar_length':
-    vovg_scale_bar_length = float(ll[1])
-  elif key == '!vovg_scale_bar_pos':
-    vovg_scale_bar_pos_x = float(ll[1])
-    vovg_scale_bar_pos_y = float(ll[2])
+  elif key == '!vovg_scale':
+    v1 = float(ll[1]) / 1E6  # um/s -> m/s
+    v2 = float(ll[2]) / 1E3  # mm -> m
+    vovg_scale = v2 / v1
+  elif key == '!vovg_sbar_val':
+    # convert input um/s to m/s.
+    vovg_sbar_val = float(ll[1]) / 1.0E6
+  elif key == '!vovg_sbar_pos':
+    # convert input (mm) to m.
+    vovg_sbar_x1 = float(ll[1]) / 1E3
+    vovg_sbar_y1 = float(ll[2]) / 1E3
   elif key == '!fov_pos':
     fov_pos_x = []
     fov_pos_y = []
@@ -102,12 +108,13 @@ n_culay = len(culay)
 
 n_fafov = len(fafov)
 for i in range(n_fafov):
-  fafov[i].sbar_len = vovg_scale_bar_length
-  fafov[i].sbar_x1 = vovg_scale_bar_pos_x
-  fafov[i].sbar_y1 = vovg_scale_bar_pos_y
+  fafov[i].sbar_val = vovg_sbar_val
+  fafov[i].sbar_x1 = vovg_sbar_x1
+  fafov[i].sbar_y1 = vovg_sbar_y1
   #
   fafov[i].set_dir_traspe_1(dir_traspe_1)
   fafov[i].set_scale_fov_to_layout(scale_fov_to_layout)
+  fafov[i].set_vovg_scale(vovg_scale)
   fafov[i].load_vecs()
   fafov[i].pro1()
 

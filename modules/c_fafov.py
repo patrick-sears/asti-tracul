@@ -11,8 +11,12 @@ class c_fafov:
   def __init__(self, vid):
     self.vid = vid
     self.vidname = 'v{0:03d}'.format( self.vid )
-    self.sbar_len = None  # um/s
-    self.sbar_len_mm = None
+    # scale bar:
+    #  sbar_len is it's length on graph.
+    #  sbar_val is the value it stands for.
+    self.sbar_len = None  # m (converted to mm on graph)
+    # self.sbar_len_mm = None
+    self.sbar_val = None  # m/s (converted to um/s on graph)
     self.sbar_x1 = None
     self.sbar_y1 = None
   #
@@ -28,6 +32,9 @@ class c_fafov:
   #
   def set_scale_fov_to_layout(self, scale):
     self.scale_fov_to_layout = scale
+  #
+  def set_vovg_scale(self, scale):
+    self.vovg_scale = scale
   #
   def set_fov_pos(self, pos_x, pos_y):
     self.fov_pos_x = pos_x
@@ -122,15 +129,29 @@ class c_fafov:
       y.append( None )
     plt.plot(x, y, color='#888888')
     #
-    # um/s scale bar.
-    self.sbar_len_mm = self.sbar_len * self.scale_fov_to_layout / 1000.0
-    sbar_x2 = self.sbar_x1 + self.sbar_len_mm
-    sbar_y2 = self.sbar_y1
-    sbar_x = [ self.sbar_x1, sbar_x2 ]
-    sbar_y = [ self.sbar_y1, sbar_y2 ]
-    plt.plot( sbar_x, sbar_y, color='#009900' )
+    ###############################################
+    # value m/s, for graphing will be um/s scale bar.
+    # length m, for graphing will be mm.
+    #############
+    # temporary kluge
+    # scale in [mm]/[um/s]
+    # SI:  [m]/[m/s]
+    ftl_SI = self.scale_fov_to_layout * 1E6 / 1E3
+    # self.sbar_len = self.sbar_val * self.scale_fov_to_layout
+    # self.sbar_len = self.sbar_val * ftl_SI
+    self.sbar_len = self.sbar_val * self.vovg_scale
+    #############
+    len = self.sbar_len * 1000  # convert m to mm.
+    print("sbar_val (um/s): ", self.sbar_val*1E6)
+    print("len: ", len)
+    x1 = self.sbar_x1 * 1000  # Convert m -> mm
+    y1 = self.sbar_y1 * 1000  # Convert m -> mm
+    x = [ x1, x1+len ]
+    y = [ y1, y1 ]
+    plt.plot( x, y, color='#009900' )
+    ###############################################
     #
-    #
+    # vec_mean_dx_mm is in mm/s
     mdx = self.vec_mean_dx_mm * self.scale_fov_to_layout
     mdy = self.vec_mean_dy_mm * self.scale_fov_to_layout
     mx = [ self.fov_pos_x, self.fov_pos_x+mdx ]
@@ -140,7 +161,6 @@ class c_fafov:
   # class !end
 ##################################################################
 
-    self.vec_mean_dy_mm = np.mean( self.vec_dy_mm )
 
 
 
