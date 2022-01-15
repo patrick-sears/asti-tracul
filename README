@@ -6,3 +6,38 @@ It takes asti-traspe data for several videos in one device or
 culture and does further analysis.
 
 
+
+
+---------------------------------
+oufname1
+---------------------------------
+glob_vu_mag
+  - The mean of all sys2_vu_val
+  - The sys2_vu_val is the component of the
+    fov's mean velocity unit vector in the sys2
+    flow direction, which could be negative.
+  - Range:  [-1, 1], 1 = exactly in standard
+    flow direction.
+glob_vu_dir
+  - The global direction of flow as determined
+    by the unit vector.
+  - Values:  +1 or -1.
+      +1:  It's a 2pi.u+ culture.
+      -1:  It's a 2pi.u- culture.
+glob_v_val
+  - The mean from all FOVs of the component of the
+    FOV's mean velocity along the sys2 e1 vector.
+    This is the mean speed globally going around
+    the culture.
+Note that glob_vu_mag and glob_v_val could have different
+signs.  For example...  Imagine there are three very slow
+2pi.u+ FOVs and one very fast 2pi.u- FOV.  Then glob_vu_mag > 0
+because it is dominated by the direction in each FOV.  But
+glob_v_val < 0 because it is an average of the speeds and,
+in this case, the mean speed is dominated by the one single
+FOV with a high speed.
+---------------------------------
+
+
+
+
