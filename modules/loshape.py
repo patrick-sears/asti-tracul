@@ -11,7 +11,8 @@ import math
 class c_loshape_canvas:
   #
   def __init__(self):
-    self.a = None
+    self.w = None
+    self.h = None
   #
   def set(self, line):
     # print("Checking: <"+line+">")
@@ -35,7 +36,6 @@ class c_loshape_canvas:
     x = [-wr,  wr, wr, -wr, -wr]
     y = [-hr, -hr, hr,  hr, -hr]
     plt.plot(x,y, color=self.border_color)
-  #
   #
   # class !end
 ##################################################################

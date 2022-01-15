@@ -44,8 +44,11 @@ class c_fafov:
     #
     fname = self.dir_traspe_1 + '/' + self.vidname + '.data'
     #
-    self.vec_dx_um = []
-    self.vec_dy_um = []
+    ######################################
+    # Input is in um/s, convert to SI base units.
+    self.vec_dx = []
+    self.vec_dy = []
+    #
     f = open(fname)
     for l in f:
       if l.startswith('--- ---- '):  break
@@ -53,38 +56,27 @@ class c_fafov:
       l = l.strip()
       lb = " ".join( l.split() )
       ll = lb.split(" ")
-      self.vec_dx_um.append( float(ll[2]) )
-      self.vec_dy_um.append( float(ll[3]) )
+      self.vec_dx.append( float(ll[2])/1E6 )
+      self.vec_dy.append( float(ll[3])/1E6 )
     f.close()
-    self.n_vec = len(self.vec_dx_um)
-    #
+    self.n_vec = len(self.vec_dx)
   #
   def pro1(self):
     #
-    self.vec_dx_mm = []
-    self.vec_dy_mm = []
-    #
-    self.vec_mag_max_um = 0.0
+    self.vec_mag_max = 0.0
     #
     for i in range(self.n_vec):
-      self.vec_dx_mm.append( self.vec_dx_um[i] / 1000.0 )
-      self.vec_dy_mm.append( self.vec_dy_um[i] / 1000.0 )
-      #
-      mag_um = math.hypot(self.vec_dx_um[i], self.vec_dy_um[i])
-      if mag_um > self.vec_mag_max_um:
-        self.vec_mag_max_um = mag_um
+      mag = math.hypot(self.vec_dx[i], self.vec_dy[i])
+      if mag > self.vec_mag_max:
+        self.vec_mag_max = mag
     #
-    self.vec_mag_max_mm = self.vec_mag_max_um / 1000.0
+    self.vec_mean_dx = np.mean( self.vec_dx )
+    self.vec_mean_dy = np.mean( self.vec_dy )
     #
-    self.vec_mean_dx_mm = np.mean( self.vec_dx_mm )
-    self.vec_mean_dy_mm = np.mean( self.vec_dy_mm )
+    self.vec_mean_mag = math.hypot( self.vec_mean_dx, self.vec_mean_dy)
     #
-    self.vec_mean_dx_um = np.mean( self.vec_dx_um )
-    self.vec_mean_dy_um = np.mean( self.vec_dy_um )
-    self.vec_mean_mag_um = math.hypot( self.vec_mean_dx_um, self.vec_mean_dy_um )
-    #
-    self.mean_ux = self.vec_mean_dx_um / self.vec_mean_mag_um
-    self.mean_uy = self.vec_mean_dy_um / self.vec_mean_mag_um
+    self.mean_ux = self.vec_mean_dx / self.vec_mean_mag
+    self.mean_uy = self.vec_mean_dy / self.vec_mean_mag
     #
     # Calculate the component of the unit vector in the
     # direction of the standard flow axis, sys2_e1.
@@ -105,8 +97,8 @@ class c_fafov:
     #
     # Calculate the component of the velocity in the direction
     # of the sys2_e1.
-    self.sys2_v_x = self.vec_mean_dx_um * self.sys2_e1x
-    self.sys2_v_y = self.vec_mean_dy_um * self.sys2_e1y
+    self.sys2_v_x = self.vec_mean_dx * self.sys2_e1x
+    self.sys2_v_y = self.vec_mean_dy * self.sys2_e1y
     self.sys2_v_mag = math.hypot(self.sys2_v_x, self.sys2_v_y)
     # Note that sys2_v_mag will be positive even if the sys2_v
     # is in the opposite direction from the sys2_u vector.
@@ -120,9 +112,14 @@ class c_fafov:
     # Plot the velocity vectors.
     dx = []
     dy = []
+    # for i in range(self.n_vec):
+    #   dx.append( self.vec_dx_mm[i] * self.scale_fov_to_layout )
+    #   dy.append( self.vec_dy_mm[i] * self.scale_fov_to_layout )
     for i in range(self.n_vec):
-      dx.append( self.vec_dx_mm[i] * self.scale_fov_to_layout )
-      dy.append( self.vec_dy_mm[i] * self.scale_fov_to_layout )
+      # Convert vovg:  velocity to distance on graph.
+      # Then convert 1E3:  SI base to mm for graphing.
+      dx.append( (self.vec_dx[i] * self.vovg_scale) * 1E3 )
+      dy.append( (self.vec_dy[i] * self.vovg_scale) * 1E3 )
     x = []
     y = []
     for i in range(self.n_vec):
@@ -152,8 +149,10 @@ class c_fafov:
     #
     # Plot mean vectors.
     # vec_mean_dx_mm is in mm/s
-    mdx = self.vec_mean_dx_mm * self.scale_fov_to_layout
-    mdy = self.vec_mean_dy_mm * self.scale_fov_to_layout
+    # mdx = self.vec_mean_dx_mm * self.scale_fov_to_layout
+    # mdy = self.vec_mean_dy_mm * self.scale_fov_to_layout
+    mdx = self.vec_mean_dx * self.vovg_scale * 1E3
+    mdy = self.vec_mean_dy * self.vovg_scale * 1E3
     mx = [ fpx, fpx+mdx ]
     my = [ fpy, fpy+mdy ]
     plt.plot(mx, my, color='#ff0000')
