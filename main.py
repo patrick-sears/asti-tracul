@@ -151,6 +151,11 @@ for i in range(n_fafov):
 glob_v_val /= n_fafov
 ############################################
 
+for i in range(n_fafov):
+  fafov[i].set_sys3( glob_vu_dir )
+  # if glob_vu_dir == 1, it's the same as sys2.
+  # If -1, there is a pi rotation of the basis
+  # vectors.
 
 
 

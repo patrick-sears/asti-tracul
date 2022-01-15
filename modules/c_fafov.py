@@ -104,6 +104,23 @@ class c_fafov:
     # is in the opposite direction from the sys2_u vector.
     #
   #
+  def set_sys3(self, direction ):
+    # First make sure we take care of possible
+    # getting a float close to 1 rather than an int.
+    # Note we might even get 0 if there is not global
+    # direction defined, in which case we just use
+    # the same as sys2.
+    if direction >= 0:  dir = int(1)   # use sys2
+    else:               dir = int(-1)  # rotate by pi
+    #
+    self.sys3_e1x = dir * self.sys2_e1x
+    self.sys3_e1y = dir * self.sys2_e1y
+    self.sys3_e2x = dir * self.sys2_e2x
+    self.sys3_e2y = dir * self.sys2_e2y
+    #
+  #
+  #
+  #
   def plot_vecs_on_layout(self):
     # fp:  fov pos for graphing (in mm)
     fpx = self.fov_pos_x * 1E3
