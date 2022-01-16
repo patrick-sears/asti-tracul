@@ -58,13 +58,13 @@ class c_fafov:
       vel = [ float(ll[2])/1E6, float(ll[3])/1E6 ]
       self.vela.append( np.array( vel ) )
     f.close()
-    self.n_vec = len(self.vela)
+    self.n_vel = len(self.vela)
   #
   def pro1(self):
     #
     self.vec_mag_max = 0.0
     #
-    for i in range(self.n_vec):
+    for i in range(self.n_vel):
       mag = np.linalg.norm( self.vela[i] )
       if mag > self.vec_mag_max:
         self.vec_mag_max = mag
@@ -127,15 +127,14 @@ class c_fafov:
     # Plot the velocity vectors.
     dx = []
     dy = []
-    # for i in range(self.n_vec):
-    for i in range(self.n_vec):
+    for i in range(self.n_vel):
       # Convert vovg:  velocity to distance on graph.
       # Then convert 1E3:  SI base to mm for graphing.
       dx.append( (self.vela[i][0] * self.vovg_scale) * 1E3 )
       dy.append( (self.vela[i][1] * self.vovg_scale) * 1E3 )
     x = []
     y = []
-    for i in range(self.n_vec):
+    for i in range(self.n_vel):
       x.append( fpx )
       x.append( fpx + dx[i] )
       x.append( None )
