@@ -22,12 +22,16 @@ class c_fafov:
     self.sbar_x1 = None
     self.sbar_y1 = None
   #
-  def read_sys2_basis(self, l):
+  def read_sysB_basis(self, l):
     ll = l.split(';')
-    self.sys2_e1x = float(ll[0].strip())
-    self.sys2_e1y = float(ll[1].strip())
-    self.sys2_e2x = float(ll[2].strip())
-    self.sys2_e2y = float(ll[3].strip())
+    #
+    e1x = float(ll[0].strip())
+    e1y = float(ll[1].strip())
+    e2x = float(ll[2].strip())
+    e2y = float(ll[3].strip())
+    self.sysA_Be1 = np.array( [e1x, e1y] )
+    self.sysA_Be2 = np.array( [e2x, e2y] )
+    #
   #
   def set_dir_traspe_1(self, dir):
     self.dir_traspe_1 = dir
@@ -74,52 +78,47 @@ class c_fafov:
     #
     self.vel_mean_mag = np.linalg.norm( self.vel_mean )
     #
-    ### self.mean_ux = self.vel_mean[0] / self.vel_mean_mag
-    ### self.mean_uy = self.vel_mean[1] / self.vel_mean_mag
     # vel_mean_u is the unit vector for vel_mean.
     self.vel_mean_u = self.vel_mean / self.vel_mean_mag
     #
+    ###############
     # Calculate the component of the unit vector in the
-    # direction of the standard flow axis, sys2_e1.
+    # direction of the standard flow axis, Be1.
     # This is a measure of how well aligned the flow is
     # with the standard flow axis.
     # A "vu" is a vector calculated from unit vectors.
     # So it has no units but does not necessarily have
     # a magnitude of 1.
+    ###############
     # dot product...
-    ### sys2_vu_x = self.mean_ux * self.sys2_e1x
-    ### sys2_vu_y = self.mean_uy * self.sys2_e1y
-    sys2_vu_x = self.vel_mean_u[0] * self.sys2_e1x
-    sys2_vu_y = self.vel_mean_u[1] * self.sys2_e1y
-    self.sys2_vu_val = sys2_vu_x + sys2_vu_y
-    # sys2_vu_val:  It's the component of the mean direction
-    # along the sys2_e1.  It's how well the flow is aligned
+    self.sysB_vu_val = np.dot( self.vel_mean_u, self.sysA_Be1 )
+    ###
+    # sysB_vu_val:  It's the component of the mean direction
+    # along the Be1.  It's how well the flow is aligned
     # ignoring speed.  It's range is [-1, +1].  Note that
-    # an sy2_vu_val of -1 indicates perfectly aligned flow
+    # an sysB_vu_val of -1 indicates perfectly aligned flow
     # in the direction opposite from the sy2_e1.
     #
     # Calculate the component of the velocity in the direction
-    # of the sys2_e1.
-    self.sys2_v_x = self.vel_mean[0] * self.sys2_e1x
-    self.sys2_v_y = self.vel_mean[1] * self.sys2_e1y
-    self.sys2_v_mag = math.hypot(self.sys2_v_x, self.sys2_v_y)
-    # Note that sys2_v_mag will be positive even if the sys2_v
-    # is in the opposite direction from the sys2_u vector.
+    # of the Be1.
+    # sysB_v is the mean_vel with components in sysB.
+    self.sysB_v = np.dot( self.vel_mean, self.sysA_Be1 )
+    self.sysB_v_mag = np.linalg.norm( self.sysB_v )
+    # Note that sysB_v_mag will be positive even if the sysB_v
+    # is in the opposite direction from the sysB_u vector.
     #
   #
-  def set_sys3(self, direction ):
+  def set_sysC(self, direction ):
     # First make sure we take care of possible
     # getting a float close to 1 rather than an int.
     # Note we might even get 0 if there is not global
     # direction defined, in which case we just use
-    # the same as sys2.
-    if direction >= 0:  dir = int(1)   # use sys2
+    # the same as sysB.
+    if direction >= 0:  dir = int(1)   # use sysB
     else:               dir = int(-1)  # rotate by pi
     #
-    self.sys3_e1x = dir * self.sys2_e1x
-    self.sys3_e1y = dir * self.sys2_e1y
-    self.sys3_e2x = dir * self.sys2_e2x
-    self.sys3_e2y = dir * self.sys2_e2y
+    self.sysA_Ce1 = dir * self.sysA_Be1
+    self.sysA_Ce2 = dir * self.sysA_Be2
     #
   #
   #

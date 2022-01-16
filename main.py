@@ -67,14 +67,14 @@ for l in f:
         if v.startswith('#'):  continue
         vid.append( int(v) )
         fafov.append( c_fafov( int(v) ) )
-  elif key == '!sys2_basis':
+  elif key == '!sysB_basis':
     i = -1
     for l in f:
       l = l.strip()
       if len(l) == 0:  break
       if l[0] == '#':  continue
       i += 1
-      fafov[i].read_sys2_basis(l)
+      fafov[i].read_sysB_basis(l)
   elif key == '!culture_layout':
     culay = []
     i = -1
@@ -135,7 +135,7 @@ for i in range(n_fafov):
 # In this case it's a component.
 glob_vu_mag = 0.0
 for i in range(n_fafov):
-  glob_vu_mag += fafov[i].sys2_vu_val
+  glob_vu_mag += fafov[i].sysB_vu_val
 glob_vu_mag /= n_fafov
 glob_vu_dir = 1
 if glob_vu_mag < 0:  glob_vu_dir = -1
@@ -145,15 +145,15 @@ if glob_vu_mag < 0:  glob_vu_dir = -1
 # Note it can be negative.
 glob_v_val = 0.0
 for i in range(n_fafov):
-  mag = fafov[i].sys2_v_mag
-  if fafov[i].sys2_vu_val < 0:  mag *= -1
+  mag = fafov[i].sysB_v_mag
+  if fafov[i].sysB_vu_val < 0:  mag *= -1
   glob_v_val += mag
 glob_v_val /= n_fafov
 ############################################
 
 for i in range(n_fafov):
-  fafov[i].set_sys3( glob_vu_dir )
-  # if glob_vu_dir == 1, it's the same as sys2.
+  fafov[i].set_sysC( glob_vu_dir )
+  # if glob_vu_dir == 1, it's the same as sysB.
   # If -1, there is a pi rotation of the basis
   # vectors.
 
@@ -164,17 +164,17 @@ for i in range(n_fafov):
 ou = ''
 ou += 'i: i_fov,\n'
 ou += 'mean_ux mean_uy:  vel_mean_u{x y}\n'
-ou += 'sys2_mag:  sys2_v_mag\n'
-ou += 'sys2_vuv:  sys2_vu_val\n'
+ou += 'sysB_mag:  sysB_v_mag\n'
+ou += 'sysB_vuv:  sysB_vu_val\n'
 ou += '-----------------------\n'
-ou += 'i    mean_ux   mean_uy   sys2_mag  sys2_vuv\n'
+ou += 'i    mean_ux   mean_uy   sysB_mag  sysB_vuv\n'
 ou += '---  --------  --------  --------  --------\n'
 for i in range(n_fafov):
   ou += '{0:3d}'.format(i)
   ou += '  {0:8.5f}'.format( fafov[i].vel_mean_u[0] )
   ou += '  {0:8.5f}'.format( fafov[i].vel_mean_u[1] )
-  ou += '  {0:8.3f}'.format( fafov[i].sys2_v_mag *1E6 ) # m/s->um/s
-  ou += '  {0:8.3f}'.format( fafov[i].sys2_vu_val )
+  ou += '  {0:8.3f}'.format( fafov[i].sysB_v_mag *1E6 ) # m/s->um/s
+  ou += '  {0:8.3f}'.format( fafov[i].sysB_vu_val )
   ou += '\n'
 fz = open(oufname1, 'w')
 fz.write(ou)
