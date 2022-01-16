@@ -70,20 +70,14 @@ class c_fafov:
       if mag > self.vec_mag_max:
         self.vec_mag_max = mag
     #
-    # self.vec_mean_dx = np.mean( self.vec_dx )
-    # self.vec_mean_dy = np.mean( self.vec_dy )
-    #
     vmdx = np.mean( self.vec_dx )
     vmdy = np.mean( self.vec_dy )
-    self.vec_mean = np.array( [vmdx, vmdy] )
+    self.vel_mean = np.array( [vmdx, vmdy] )
     #
-    # self.vec_mean_mag = math.hypot( self.vec_mean_dx, self.vec_mean_dy)
-    self.vec_mean_mag = np.linalg.norm( self.vec_mean )
+    self.vel_mean_mag = np.linalg.norm( self.vel_mean )
     #
-    # self.mean_ux = self.vec_mean_dx / self.vec_mean_mag
-    # self.mean_uy = self.vec_mean_dy / self.vec_mean_mag
-    self.mean_ux = self.vec_mean[0] / self.vec_mean_mag
-    self.mean_uy = self.vec_mean[1] / self.vec_mean_mag
+    self.mean_ux = self.vel_mean[0] / self.vel_mean_mag
+    self.mean_uy = self.vel_mean[1] / self.vel_mean_mag
     #
     # Calculate the component of the unit vector in the
     # direction of the standard flow axis, sys2_e1.
@@ -104,10 +98,8 @@ class c_fafov:
     #
     # Calculate the component of the velocity in the direction
     # of the sys2_e1.
-    ### self.sys2_v_x = self.vec_mean_dx * self.sys2_e1x
-    ### self.sys2_v_y = self.vec_mean_dy * self.sys2_e1y
-    self.sys2_v_x = self.vec_mean[0] * self.sys2_e1x
-    self.sys2_v_y = self.vec_mean[1] * self.sys2_e1y
+    self.sys2_v_x = self.vel_mean[0] * self.sys2_e1x
+    self.sys2_v_y = self.vel_mean[1] * self.sys2_e1y
     self.sys2_v_mag = math.hypot(self.sys2_v_x, self.sys2_v_y)
     # Note that sys2_v_mag will be positive even if the sys2_v
     # is in the opposite direction from the sys2_u vector.
@@ -174,11 +166,8 @@ class c_fafov:
     ###############################################
     #
     # Plot mean vectors.
-    # vec_mean_dx_mm is in mm/s
-    ### mdx = self.vec_mean_dx * self.vovg_scale * 1E3
-    ### mdy = self.vec_mean_dy * self.vovg_scale * 1E3
-    mdx = self.vec_mean[0] * self.vovg_scale * 1E3
-    mdy = self.vec_mean[1] * self.vovg_scale * 1E3
+    mdx = self.vel_mean[0] * self.vovg_scale * 1E3
+    mdy = self.vel_mean[1] * self.vovg_scale * 1E3
     mx = [ fpx, fpx+mdx ]
     my = [ fpy, fpy+mdy ]
     plt.plot(mx, my, color='#ff0000')
