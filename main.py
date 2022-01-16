@@ -21,6 +21,7 @@ for l in f:
   if key == '!run_name':  run_name = ll[1]
   elif key == '!cul_name':  cul_name = ll[1]
   elif key == '!dir_traspe_1':  dir_traspe_1 = ll[1]
+  elif key == '!oudir':  oudir = ll[1]
   elif key == '!oufname1':  oufname1 = ll[1]
   elif key == '!oufname2':  oufname2 = ll[1]
   elif key == '!ougfname1':  ougfname1 = ll[1]
@@ -181,7 +182,7 @@ for i in range(n_fafov):
   ou += '  {0:8.3f}'.format( fafov[i].sysB_vel_mean_mag *1E6 ) # m/s->um/s
   ou += '  {0:8.3f}'.format( fafov[i].sysB_vu_val )
   ou += '\n'
-fz = open(oufname1, 'w')
+fz = open(oudir+'/'+oufname1, 'w')
 fz.write(ou)
 fz.close()
 #######################################################
@@ -195,7 +196,7 @@ ou += 'glob_vu_mag (1):    {0:8.3f}\n'.format( glob_vu_mag )
 ou += 'glob_vu_dir (1):    {0:8.3f}\n'.format( glob_vu_dir )
 ou += 'glob_v_val (um/s):  {0:8.3f}\n'.format( glob_v_val *1E6 ) # m/s->um/s
 ou += '\n'
-fz = open(oufname2, 'w')
+fz = open(oudir+'/'+oufname2, 'w')
 fz.write(ou)
 fz.close()
 #######################################################
@@ -235,8 +236,7 @@ plt.gca().set_aspect('equal', adjustable='box')
 
 plt.title("scale:  mm")
 
-# plt.savefig(oudir+'/'+ougfname1)
-plt.savefig(ougfname1)
+plt.savefig(oudir+'/'+ougfname1, bbox_inches='tight')
 
 
 
