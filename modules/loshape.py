@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 
+from modules import fun
+
+import numpy as np
 from matplotlib import pyplot as plt
 import sys
 import math
@@ -92,14 +95,9 @@ class c_loshape_circle:
     self.color = ll[3]
   #
   def plot(self):
-    n_pnt = self.n_seg + 1
-    dang = math.pi * 2.0 / self.n_seg
-    x = []
-    y = []
-    for i in range(n_pnt):
-      ang = i * dang
-      x.append( self.r * math.cos(ang) )
-      y.append( self.r * math.sin(ang) )
+    #
+    x, y = fun.get_gr_circle(self.r, n_seg=self.n_seg )
+    #
     plt.plot(x,y, color=self.color)
   #
   # class !end
