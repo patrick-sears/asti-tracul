@@ -145,7 +145,7 @@ if glob_vu_mag < 0:  glob_vu_dir = -1
 # Note it can be negative.
 glob_v_val = 0.0
 for i in range(n_fafov):
-  mag = fafov[i].sysB_v_mag
+  mag = fafov[i].sysB_vel_mean_mag
   if fafov[i].sysB_vu_val < 0:  mag *= -1
   glob_v_val += mag
 glob_v_val /= n_fafov
@@ -164,16 +164,18 @@ for i in range(n_fafov):
 ou = ''
 ou += 'i: i_fov,\n'
 ou += 'mean_ux mean_uy:  vel_mean_u{x y}\n'
-ou += 'sysB_mag:  sysB_v_mag\n'
+ou += 'vel_mag:  vel_mean_mag, the mag of the mean vel.\n'
+ou += 'sysB_mag:  sysB_vel_mean_mag, should be same as vel_mag.\n'
 ou += 'sysB_vuv:  sysB_vu_val\n'
 ou += '-----------------------\n'
-ou += 'i    mean_ux   mean_uy   sysB_mag  sysB_vuv\n'
-ou += '---  --------  --------  --------  --------\n'
+ou += 'i    mean_ux   mean_uy   vel_mag   sysB_mag  sysB_vuv\n'
+ou += '---  --------  --------  --------  --------  --------\n'
 for i in range(n_fafov):
   ou += '{0:3d}'.format(i)
   ou += '  {0:8.5f}'.format( fafov[i].vel_mean_u[0] )
   ou += '  {0:8.5f}'.format( fafov[i].vel_mean_u[1] )
-  ou += '  {0:8.3f}'.format( fafov[i].sysB_v_mag *1E6 ) # m/s->um/s
+  ou += '  {0:8.3f}'.format( fafov[i].vel_mean_mag *1E6 ) # m/s->um/s
+  ou += '  {0:8.3f}'.format( fafov[i].sysB_vel_mean_mag *1E6 ) # m/s->um/s
   ou += '  {0:8.3f}'.format( fafov[i].sysB_vu_val )
   ou += '\n'
 fz = open(oufname1, 'w')

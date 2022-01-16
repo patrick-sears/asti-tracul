@@ -32,6 +32,10 @@ class c_fafov:
     self.sysA_Be1 = np.array( [e1x, e1y] )
     self.sysA_Be2 = np.array( [e2x, e2y] )
     #
+    e1 = [1, 0]
+    e2 = [0, 1]
+    self.mocBA = fun.MoC(e1, e2, self.sysA_Be1, self.sysA_Be2)
+    #
   #
   def set_dir_traspe_1(self, dir):
     self.dir_traspe_1 = dir
@@ -101,11 +105,12 @@ class c_fafov:
     #
     # Calculate the component of the velocity in the direction
     # of the Be1.
-    # sysB_v is the mean_vel with components in sysB.
-    self.sysB_v = np.dot( self.vel_mean, self.sysA_Be1 )
-    self.sysB_v_mag = np.linalg.norm( self.sysB_v )
-    # Note that sysB_v_mag will be positive even if the sysB_v
-    # is in the opposite direction from the sysB_u vector.
+    # sysB_vel_mean is the mean_vel with components in sysB.
+    self.sysB_vel_mean = self.mocBA * self.vel_mean
+    self.sysB_vel_mean_mag = np.linalg.norm( self.sysB_vel_mean )
+    # Note that sysB_vel_mean_mag will be positive even if the
+    # sysB_vel_mean is in the opposite direction from the sysB_u
+    # vector.
     #
   #
   def set_sysC(self, direction ):
