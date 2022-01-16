@@ -39,8 +39,7 @@ class c_fafov:
     self.vovg_scale = scale
   #
   def set_fov_pos(self, pos_x, pos_y):
-    self.fov_pos_x = pos_x
-    self.fov_pos_y = pos_y
+    self.fov_pos = np.array( [pos_x, pos_y] )
   #
   def load_vecs(self):
     #
@@ -123,8 +122,7 @@ class c_fafov:
   #
   def plot_vecs_on_layout(self):
     # fp:  fov pos for graphing (in mm)
-    fp = np.array( [self.fov_pos_x, self.fov_pos_y] )
-    fp *= 1E3 # convert from SI base to mm
+    fp = 1E3 * self.fov_pos
     #
     # Plot the velocity vectors.
     # Convert vovg:  velocity to distance on graph.
