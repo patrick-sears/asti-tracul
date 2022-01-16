@@ -63,19 +63,21 @@ class c_fafov:
   #
   def pro1(self):
     #
-    self.vec_mag_max = 0.0
+    self.vel_mag_max = 0.0
     #
     for i in range(self.n_vela):
       mag = np.linalg.norm( self.vela[i] )
-      if mag > self.vec_mag_max:
-        self.vec_mag_max = mag
+      if mag > self.vel_mag_max:
+        self.vel_mag_max = mag
     #
     self.vel_mean = np.mean( self.vela, axis=0 )
     #
     self.vel_mean_mag = np.linalg.norm( self.vel_mean )
     #
-    self.mean_ux = self.vel_mean[0] / self.vel_mean_mag
-    self.mean_uy = self.vel_mean[1] / self.vel_mean_mag
+    ### self.mean_ux = self.vel_mean[0] / self.vel_mean_mag
+    ### self.mean_uy = self.vel_mean[1] / self.vel_mean_mag
+    # vel_mean_u is the unit vector for vel_mean.
+    self.vel_mean_u = self.vel_mean / self.vel_mean_mag
     #
     # Calculate the component of the unit vector in the
     # direction of the standard flow axis, sys2_e1.
@@ -85,8 +87,10 @@ class c_fafov:
     # So it has no units but does not necessarily have
     # a magnitude of 1.
     # dot product...
-    sys2_vu_x = self.mean_ux * self.sys2_e1x
-    sys2_vu_y = self.mean_uy * self.sys2_e1y
+    ### sys2_vu_x = self.mean_ux * self.sys2_e1x
+    ### sys2_vu_y = self.mean_uy * self.sys2_e1y
+    sys2_vu_x = self.vel_mean_u[0] * self.sys2_e1x
+    sys2_vu_y = self.vel_mean_u[1] * self.sys2_e1y
     self.sys2_vu_val = sys2_vu_x + sys2_vu_y
     # sys2_vu_val:  It's the component of the mean direction
     # along the sys2_e1.  It's how well the flow is aligned

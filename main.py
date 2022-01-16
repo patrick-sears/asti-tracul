@@ -163,7 +163,7 @@ for i in range(n_fafov):
 # oufname1 data
 ou = ''
 ou += 'i: i_fov,\n'
-ou += 'mean_ux mean_uy\n'
+ou += 'mean_ux mean_uy:  vel_mean_u{x y}\n'
 ou += 'sys2_mag:  sys2_v_mag\n'
 ou += 'sys2_vuv:  sys2_vu_val\n'
 ou += '-----------------------\n'
@@ -171,8 +171,8 @@ ou += 'i    mean_ux   mean_uy   sys2_mag  sys2_vuv\n'
 ou += '---  --------  --------  --------  --------\n'
 for i in range(n_fafov):
   ou += '{0:3d}'.format(i)
-  ou += '  {0:8.5f}'.format( fafov[i].mean_ux )
-  ou += '  {0:8.5f}'.format( fafov[i].mean_uy )
+  ou += '  {0:8.5f}'.format( fafov[i].vel_mean_u[0] )
+  ou += '  {0:8.5f}'.format( fafov[i].vel_mean_u[1] )
   ou += '  {0:8.3f}'.format( fafov[i].sys2_v_mag *1E6 ) # m/s->um/s
   ou += '  {0:8.3f}'.format( fafov[i].sys2_vu_val )
   ou += '\n'
