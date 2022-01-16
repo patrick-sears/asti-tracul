@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+from modules import fun
+
 import numpy as np
 from matplotlib import pyplot as plt
 import math
@@ -58,13 +60,13 @@ class c_fafov:
       vel = [ float(ll[2])/1E6, float(ll[3])/1E6 ]
       self.vela.append( np.array( vel ) )
     f.close()
-    self.n_vel = len(self.vela)
+    self.n_vela = len(self.vela)
   #
   def pro1(self):
     #
     self.vec_mag_max = 0.0
     #
-    for i in range(self.n_vel):
+    for i in range(self.n_vela):
       mag = np.linalg.norm( self.vela[i] )
       if mag > self.vec_mag_max:
         self.vec_mag_max = mag
@@ -121,26 +123,18 @@ class c_fafov:
   #
   def plot_vecs_on_layout(self):
     # fp:  fov pos for graphing (in mm)
-    fpx = self.fov_pos_x * 1E3
-    fpy = self.fov_pos_y * 1E3
+    fp = np.array( [self.fov_pos_x, self.fov_pos_y] )
+    fp *= 1E3 # convert from SI base to mm
     #
     # Plot the velocity vectors.
-    dx = []
-    dy = []
-    for i in range(self.n_vel):
-      # Convert vovg:  velocity to distance on graph.
-      # Then convert 1E3:  SI base to mm for graphing.
-      dx.append( (self.vela[i][0] * self.vovg_scale) * 1E3 )
-      dy.append( (self.vela[i][1] * self.vovg_scale) * 1E3 )
-    x = []
-    y = []
-    for i in range(self.n_vel):
-      x.append( fpx )
-      x.append( fpx + dx[i] )
-      x.append( None )
-      y.append( fpy )
-      y.append( fpy + dy[i] )
-      y.append( None )
+    # Convert vovg:  velocity to distance on graph.
+    # Then convert 1E3:  SI base to mm for graphing.
+    #
+    grv = self.vela
+    for i in range(self.n_vela):
+      grv[i] *= 1E3 * self.vovg_scale
+    x, y = fun.get_gr_from_vecarray_2( grv, pos=fp )
+    #
     plt.plot(x, y, color='#888888')
     #
     ###############################################
@@ -160,11 +154,10 @@ class c_fafov:
     ###############################################
     #
     # Plot mean vectors.
-    mdx = self.vel_mean[0] * self.vovg_scale * 1E3
-    mdy = self.vel_mean[1] * self.vovg_scale * 1E3
-    mx = [ fpx, fpx+mdx ]
-    my = [ fpy, fpy+mdy ]
-    plt.plot(mx, my, color='#ff0000')
+    #
+    grv = self.vel_mean * self.vovg_scale * 1E3
+    x, y = fun.get_gr_from_vec_2(grv, pos=fp)
+    plt.plot(x, y, color='#ff0000')
   #
   # class !end
 ##################################################################
