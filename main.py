@@ -158,6 +158,9 @@ for i in range(n_fafov):
   # vectors.
 
 
+for i in range(n_fafov):
+  fafov[i].pro2()
+
 
 #######################################################
 # oufname1 data
