@@ -112,6 +112,11 @@ class c_fafov:
     # sysB_vel_mean is in the opposite direction from the sysB_u
     # vector.
     #
+    # gef:  globally effective flow.
+    self.gef_mag = np.dot( self.vel_mean, self.sysA_Be1 )
+    self.gef_vel = self.gef_mag * self.sysA_Be1
+    #
+    #
   #
   def set_sysC(self, direction ):
     # First make sure we take care of possible
@@ -159,11 +164,16 @@ class c_fafov:
     plt.plot( x, y, color='#009900' )
     ###############################################
     #
-    # Plot mean vectors.
+    # Globally effective flow.
+    v = self.gef_vel * self.vovg_scale * 1E3
+    x, y = fun.get_gr_from_vec_2(v, pos=fp)
+    plt.plot(x, y, color='#00cc00')
     #
+    # Plot mean vectors.
     grv = self.vel_mean * self.vovg_scale * 1E3
     x, y = fun.get_gr_from_vec_2(grv, pos=fp)
     plt.plot(x, y, color='#ff0000')
+    #
   #
   # class !end
 ##################################################################
