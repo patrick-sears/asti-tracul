@@ -131,7 +131,6 @@ class c_fafov:
     self.gef_mag = np.dot( self.vel_mean, self.sysA_Ce1 )
     self.gef_vel = self.gef_mag * self.sysA_Ce1
   #
-  #
   def plot_vecs_on_layout(self):
     # fp:  fov pos for graphing (in mm)
     fp = 1E3 * self.fov_pos

@@ -163,9 +163,19 @@ for i in range(n_fafov):
   fafov[i].pro2()
 
 
+gef_mag_mean = 0.0
+for i in range(n_fafov):
+  gef_mag_mean += fafov[i].gef_mag
+gef_mag_mean /= n_fafov
+
+
+
+
+
 #######################################################
 # oufname1 data
 ou = ''
+ou += '-----------------------------------------------------\n'
 ou += 'i: i_fov,\n'
 ou += 'mean_ux mean_uy:  vel_mean_u{x y}\n'
 ou += 'vel_mag:  vel_mean_mag, the mag of the mean vel.\n'
@@ -182,6 +192,19 @@ for i in range(n_fafov):
   ou += '  {0:8.3f}'.format( fafov[i].sysB_vel_mean_mag *1E6 ) # m/s->um/s
   ou += '  {0:8.3f}'.format( fafov[i].sysB_vu_val )
   ou += '\n'
+ou += '-----------------------------------------------------\n'
+ou += '\n\n\n'
+ou += '-----------------------------------------------------\n'
+ou += 'gef_mag (um/s)\n'
+ou += '-----------------------\n'
+ou += 'i    gef_mag\n'
+ou += '---  --------  --------  --------  --------  --------\n'
+for i in range(n_fafov):
+  ou += '{0:3d}'.format(i)
+  ou += '  {0:8.3f}'.format( fafov[i].gef_mag * 1E6)
+  ou += '\n'
+ou += '-----------------------------------------------------\n'
+ou += '\n\n\n'
 fz = open(oudir+'/'+oufname1, 'w')
 fz.write(ou)
 fz.close()
@@ -192,9 +215,10 @@ fz.close()
 # oufname2 data
 ou = ''
 ou += '\n'
-ou += 'glob_vu_mag (1):    {0:8.3f}\n'.format( glob_vu_mag )
-ou += 'glob_vu_dir (1):    {0:8.3f}\n'.format( glob_vu_dir )
-ou += 'glob_v_val (um/s):  {0:8.3f}\n'.format( glob_v_val *1E6 ) # m/s->um/s
+ou += 'glob_vu_mag (1):     {0:8.3f}\n'.format( glob_vu_mag )
+ou += 'glob_vu_dir (1):     {0:8.3f}\n'.format( glob_vu_dir )
+ou += 'glob_v_val (um/s):   {0:8.3f}\n'.format( glob_v_val *1E6 ) # m/s->um/s
+ou += 'gef_mag_mean (um/s): {0:8.3f}\n'.format( gef_mag_mean *1E6 ) # m/s->um/s
 ou += '\n'
 fz = open(oudir+'/'+oufname2, 'w')
 fz.write(ou)
