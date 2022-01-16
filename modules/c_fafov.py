@@ -46,8 +46,7 @@ class c_fafov:
     #
     ######################################
     # Input is in um/s, convert to SI base units.
-    self.vec_dx = []
-    self.vec_dy = []
+    self.vela = []
     #
     f = open(fname)
     for l in f:
@@ -56,23 +55,21 @@ class c_fafov:
       l = l.strip()
       lb = " ".join( l.split() )
       ll = lb.split(" ")
-      self.vec_dx.append( float(ll[2])/1E6 )
-      self.vec_dy.append( float(ll[3])/1E6 )
+      vel = [ float(ll[2])/1E6, float(ll[3])/1E6 ]
+      self.vela.append( np.array( vel ) )
     f.close()
-    self.n_vec = len(self.vec_dx)
+    self.n_vec = len(self.vela)
   #
   def pro1(self):
     #
     self.vec_mag_max = 0.0
     #
     for i in range(self.n_vec):
-      mag = math.hypot(self.vec_dx[i], self.vec_dy[i])
+      mag = np.linalg.norm( self.vela[i] )
       if mag > self.vec_mag_max:
         self.vec_mag_max = mag
     #
-    vmdx = np.mean( self.vec_dx )
-    vmdy = np.mean( self.vec_dy )
-    self.vel_mean = np.array( [vmdx, vmdy] )
+    self.vel_mean = np.mean( self.vela, axis=0 )
     #
     self.vel_mean_mag = np.linalg.norm( self.vel_mean )
     #
@@ -131,13 +128,11 @@ class c_fafov:
     dx = []
     dy = []
     # for i in range(self.n_vec):
-    #   dx.append( self.vec_dx_mm[i] * self.scale_fov_to_layout )
-    #   dy.append( self.vec_dy_mm[i] * self.scale_fov_to_layout )
     for i in range(self.n_vec):
       # Convert vovg:  velocity to distance on graph.
       # Then convert 1E3:  SI base to mm for graphing.
-      dx.append( (self.vec_dx[i] * self.vovg_scale) * 1E3 )
-      dy.append( (self.vec_dy[i] * self.vovg_scale) * 1E3 )
+      dx.append( (self.vela[i][0] * self.vovg_scale) * 1E3 )
+      dy.append( (self.vela[i][1] * self.vovg_scale) * 1E3 )
     x = []
     y = []
     for i in range(self.n_vec):
