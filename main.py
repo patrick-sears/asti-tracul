@@ -10,6 +10,7 @@ from matplotlib import pyplot as plt
 
 fname_conf = sys.argv[1]
 
+print("Reading configs...")
 ############################################
 f = open(fname_conf)
 for l in f:
@@ -120,6 +121,7 @@ for i in range(n_fafov):
   fafov[i].set_scale_fov_to_layout(scale_fov_to_layout)
   fafov[i].set_vovg_scale(vovg_scale)
   fafov[i].load_vecs()
+  #
   fafov[i].pro1()
 
 
@@ -170,7 +172,7 @@ gef_mag_mean /= n_fafov
 
 
 
-
+print("Saving output...")
 
 #######################################################
 # oufname1 data
@@ -270,7 +272,6 @@ plt.savefig(oudir+'/'+ougfname1, bbox_inches='tight')
 ### !graph #######################################################
 # End of graphs.
 ##################################################################
-
 
 
 
