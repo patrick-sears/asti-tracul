@@ -307,7 +307,8 @@ ca = fig.gca()
 # plt.ylim(-10, atrack[0].im_h+10 )
 plt.gca().set_aspect('equal', adjustable='box')
 
-plt.title("scale:  mm")
+# plt.title("scale:  mm")
+plt.title( cul_name+'.  Scale, mm.')
 
 plt.savefig(oudir+'/'+oufname_g1, bbox_inches='tight')
 
