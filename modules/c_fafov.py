@@ -2,6 +2,7 @@
 
 from modules import fun
 
+import os
 import numpy as np
 from matplotlib import pyplot as plt
 import math
@@ -21,6 +22,10 @@ class c_fafov:
     self.sbar_val = None  # m/s (converted to um/s on graph)
     self.sbar_x1 = None
     self.sbar_y1 = None
+    #
+    # The number of velocity vectors.  This the number of tracks.
+    self.n_vela = 0
+    self.sysC_valid = False
   #
   def read_sysB_basis(self, l):
     ll = l.split(';')
@@ -53,9 +58,14 @@ class c_fafov:
     #
     fname = self.dir_traspe_1 + '/' + self.vidname + '.data'
     #
+    self.vela = []
+    if not os.path.isfile( fname ):
+      # Assume this FOV has no tracks.
+      self.n_vela = 0
+      return
+    #
     ######################################
     # Input is in um/s, convert to SI base units.
-    self.vela = []
     #
     f = open(fname)
     for l in f:
@@ -70,6 +80,8 @@ class c_fafov:
     self.n_vela = len(self.vela)
   #
   def pro1(self):
+    #
+    if self.n_vela == 0:  return
     #
     self.vel_mag_max = 0.0
     #
@@ -114,6 +126,9 @@ class c_fafov:
     #
   #
   def set_sysC(self, direction ):
+    #
+    if not self.sysC_valid:  return
+    #
     # First make sure we take care of possible
     # getting a float close to 1 rather than an int.
     # Note we might even get 0 if there is not global
@@ -128,8 +143,32 @@ class c_fafov:
   #
   def pro2(self):  # requires the global direction to be set
     # gef:  globally effective flow.
+    ### print("**> n_vela: ", self.n_vela)
+    if not self.sysC_valid:  return
     self.gef_mag = np.dot( self.vel_mean, self.sysA_Ce1 )
     self.gef_vel = self.gef_mag * self.sysA_Ce1
+  #
+  def ouline1(self):
+    ou = ''
+    if self.n_vela > 0:
+      ou += '  {0:8.5f}'.format( self.vel_mean_u[0] )
+      ou += '  {0:8.5f}'.format( self.vel_mean_u[1] )
+      ou += '  {0:8.3f}'.format( self.vel_mean_mag *1E6 ) # m/s->um/s
+      ou += '  {0:8.3f}'.format( self.sysB_vel_mean_mag *1E6 ) # m/s->um/s
+      ou += '  {0:8.3f}'.format( self.sysB_vu_val )
+    else:
+      for i in range(5):
+        ou += '  --------'
+    return ou
+  #
+  def ouline2(self):
+    ou = ''
+    if self.sysC_valid:
+      ou += '  {0:8.3f}'.format( self.gef_mag * 1E6)
+    else:
+      for i in range(1):
+        ou += '  --------'
+    return ou
   #
   def plot_vecs_on_layout(self):
     # fp:  fov pos for graphing (in mm)
@@ -163,15 +202,16 @@ class c_fafov:
     ###############################################
     #
     # Globally effective flow.
-    v = self.gef_vel * self.vovg_scale * 1E3
-    x, y = fun.get_gr_from_vec_2(v, pos=fp)
-    plt.plot(x, y, color='#00cc00')
-    #
-    # Plot mean vectors.
-    grv = self.vel_mean * self.vovg_scale * 1E3
-    x, y = fun.get_gr_from_vec_2(grv, pos=fp)
-    plt.plot(x, y, color='#ff0000')
-    #
+    if self.sysC_valid:
+      v = self.gef_vel * self.vovg_scale * 1E3
+      x, y = fun.get_gr_from_vec_2(v, pos=fp)
+      plt.plot(x, y, color='#00cc00')
+      #
+      # Plot mean vectors.
+      grv = self.vel_mean * self.vovg_scale * 1E3
+      x, y = fun.get_gr_from_vec_2(grv, pos=fp)
+      plt.plot(x, y, color='#ff0000')
+      #
   #
   # class !end
 ##################################################################
