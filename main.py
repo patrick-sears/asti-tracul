@@ -25,7 +25,7 @@ for l in f:
   elif key == '!oudir':  oudir = ll[1]
   elif key == '!oufname1':  oufname1 = ll[1]
   elif key == '!oufname2':  oufname2 = ll[1]
-  elif key == '!ougfname1':  ougfname1 = ll[1]
+  elif key == '!oufname_g1':  oufname_g1 = ll[1]
   elif key == '!scale_fov_to_layout':  scale_fov_to_layout = float(ll[1])
   elif key == '!vovg_scale':
     v1 = float(ll[1]) / 1E6  # um/s -> m/s
@@ -233,7 +233,7 @@ fz.close()
 
 ##################################################################
 ### !graph #######################################################
-# Graph 1 -- The layout.
+# Graph 1 -- The layout.  g1
 fig = plt.figure()
 
 for i in range(n_culay):
@@ -262,7 +262,7 @@ plt.gca().set_aspect('equal', adjustable='box')
 
 plt.title("scale:  mm")
 
-plt.savefig(oudir+'/'+ougfname1, bbox_inches='tight')
+plt.savefig(oudir+'/'+oufname_g1, bbox_inches='tight')
 
 
 
