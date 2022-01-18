@@ -257,18 +257,22 @@ fz.close()
 # oufname2 data
 ou = ''
 ou += '\n'
-if glob_sysC_valid:
-  ou += 'glob_sysC_valid:     yes\n'
-  ou += 'glob_vu_mag (1):     {0:8.3f}\n'.format( glob_vu_mag )
-  ou += 'glob_vu_dir (1):     {0:8.3f}\n'.format( glob_vu_dir )
-  ou += 'glob_v_val (um/s):   {0:8.3f}\n'.format( glob_v_val *1E6 ) # m/s->um/s
-  ou += 'gef_mag_mean (um/s): {0:8.3f}\n'.format( gef_mag_mean *1E6 ) # m/s->um/s
+ou += 'n_fafov:              {0:8d}\n'.format(n_fafov)
+ou += 'n_fafov_valid:        {0:8d}\n'.format(n_fafov_valid)
+if glob_vu_dir != None:
+  ou += 'glob_vu_mag (1):      {0:8.3f}\n'.format( glob_vu_mag )
+  ou += 'glob_vu_dir (1):      {0:8.3f}\n'.format( glob_vu_dir )
+  ou += 'glob_v_val (um/s):    {0:8.3f}\n'.format( glob_v_val *1E6 ) # m/s->um/s
 else:
-  ou += 'glob_sysC_valid:     no\n'
-  ou += 'glob_vu_mag (1):     --------\n'.format( glob_vu_mag )
-  ou += 'glob_vu_dir (1):     --------\n'.format( glob_vu_dir )
-  ou += 'glob_v_val (um/s):   --------\n'.format( glob_v_val *1E6 ) # m/s->um/s
-  ou += 'gef_mag_mean (um/s): --------\n'.format( gef_mag_mean *1E6 ) # m/s->um/s
+  ou += 'glob_vu_mag (1):      --------\n'
+  ou += 'glob_vu_dir (1):      --------\n'
+  ou += 'glob_v_val (um/s):    --------\n'
+if glob_sysC_valid:
+  ou += 'glob_sysC_valid:      yes\n'
+  ou += 'gef_mag_mean (um/s):  {0:8.3f}\n'.format( gef_mag_mean *1E6 ) # m/s->um/s
+else:
+  ou += 'glob_sysC_valid:      no\n'
+  ou += 'gef_mag_mean (um/s):  --------\n'
 ou += '\n'
 fz = open(oudir+'/'+oufname2, 'w')
 fz.write(ou)
