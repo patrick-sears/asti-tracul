@@ -26,6 +26,10 @@ for l in f:
   elif key == '!oufname1':  oufname1 = ll[1]
   elif key == '!oufname2':  oufname2 = ll[1]
   elif key == '!oufname_g1':  oufname_g1 = ll[1]
+  elif key == '!use_g1b':
+    if ll[1] == '1':  use_g1b = True
+    else:             use_g1b = False
+  elif key == '!oufname_g1b':  oufname_g1b = ll[1]
   elif key == '!scale_fov_to_layout':  scale_fov_to_layout = float(ll[1])
   elif key == '!vovg_scale':
     v1 = float(ll[1]) / 1E6  # um/s -> m/s
@@ -233,11 +237,10 @@ fz.close()
 
 ##################################################################
 ### !graph #######################################################
-# Graph 1 -- The layout.  g1
+# Graph 1 -- The layout with vectors.  g1
 fig = plt.figure()
 
-for i in range(n_culay):
-  culay[i].plot()
+for i in range(n_culay):  culay[i].plot()
 
 fpx = []
 fpy = []
@@ -263,6 +266,42 @@ plt.gca().set_aspect('equal', adjustable='box')
 plt.title("scale:  mm")
 
 plt.savefig(oudir+'/'+oufname_g1, bbox_inches='tight')
+
+
+
+##################################################################
+### !graph #######################################################
+# Graph 1 -- The layout by itself.  g1b
+if use_g1b:
+  plt.clf()
+  fig = plt.figure()
+  #
+  for i in range(n_culay):  culay[i].plot()
+  #
+  fpx = []
+  fpy = []
+  for i in range(n_fafov):  # convert m->mm
+    fpx.append(fov_pos_x[i] * 1E3)
+    fpy.append(fov_pos_y[i] * 1E3)
+  plt.plot(fpx, fpy,
+    linestyle='none',
+    marker='s',
+    markerfacecolor='none',
+    markeredgecolor='#000000',
+    markersize=12.0
+    )
+  #
+  # for i in range(n_fafov):  fafov[i].plot_vecs_on_layout()
+  #
+  ca = fig.gca()
+  # plt.xlim(-10, atrack[0].im_w+10 )
+  # plt.ylim(-10, atrack[0].im_h+10 )
+  plt.gca().set_aspect('equal', adjustable='box')
+  #
+  plt.title("scale:  mm")
+  #
+  plt.savefig(oudir+'/'+oufname_g1b, bbox_inches='tight')
+
 
 
 
