@@ -223,34 +223,34 @@ gef_mag_mean /= n_fafov
 
 
 #######################################################
-# glo1:  global mean values derived from ats data
+# glob2:  global mean values derived from ats data
 
-glo1_mean_v_mag = c_meaner()
-glo1_mean_speed = c_meaner()
-glo1_v_align_mag = c_meaner()
-glo1_wmean_curv = c_meaner()
+glob2_mean_v_mag = c_meaner()
+glob2_mean_speed = c_meaner()
+glob2_v_align_mag = c_meaner()
+glob2_wmean_curv = c_meaner()
 
 for i in range(n_fafov):
-  glo1_mean_v_mag.add( fafov[i].ats_mean_v_mag )
-  glo1_mean_speed.add( fafov[i].ats_mean_speed )
-  glo1_v_align_mag.add( fafov[i].ats_v_align_mag )
-  glo1_wmean_curv.add( fafov[i].ats_wmean_curv )
+  glob2_mean_v_mag.add( fafov[i].ats_mean_v_mag )
+  glob2_mean_speed.add( fafov[i].ats_mean_speed )
+  glob2_v_align_mag.add( fafov[i].ats_v_align_mag )
+  glob2_wmean_curv.add( fafov[i].ats_wmean_curv )
 
-glo1_mean_v_mag.pro1()
-glo1_mean_v_mag.set_name('glo1_mean_v_mag', 'um/s', 1E6)
-glo1_mean_v_mag.set_form(' ; ', '{0:16}', '{0:7}', '{0:3d}', '{0:9.3f}')
+glob2_mean_v_mag.pro1()
+glob2_mean_v_mag.set_name('glob2_mean_v_mag', 'um/s', 1E6)
+glob2_mean_v_mag.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:9.3f}')
 
-glo1_mean_speed.pro1()
-glo1_mean_speed.set_name('glo1_mean_speed', 'um/s', 1E6)
-glo1_mean_speed.set_form(' ; ', '{0:16}', '{0:7}', '{0:3d}', '{0:9.3f}')
+glob2_mean_speed.pro1()
+glob2_mean_speed.set_name('glob2_mean_speed', 'um/s', 1E6)
+glob2_mean_speed.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:9.3f}')
 
-glo1_v_align_mag.pro1()
-glo1_v_align_mag.set_name('glo1_v_align_mag', '1', 1)
-glo1_v_align_mag.set_form(' ; ', '{0:16}', '{0:7}', '{0:3d}', '{0:9.3f}')
+glob2_v_align_mag.pro1()
+glob2_v_align_mag.set_name('glob2_v_align_mag', '1', 1)
+glob2_v_align_mag.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:9.3f}')
 
-glo1_wmean_curv.pro1()
-glo1_wmean_curv.set_name('glo1_wmean_curv', 'um^-1', 1E-6)
-glo1_wmean_curv.set_form(' ; ', '{0:16}', '{0:7}', '{0:3d}', '{0:9.3f}')
+glob2_wmean_curv.pro1()
+glob2_wmean_curv.set_name('glob2_wmean_curv', 'um^-1', 1E-6)
+glob2_wmean_curv.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:9.3f}')
 #######################################################
 
 
@@ -320,6 +320,8 @@ fz.close()
 # oufname2 data
 ou = ''
 ou += '\n'
+ou += '-------------------------------------------------\n'
+ou += '!table_1\n'
 ou += 'n_fafov:              {0:8d}\n'.format(n_fafov)
 ou += 'n_fafov_valid:        {0:8d}\n'.format(n_fafov_valid)
 if glob_vu_dir != None:
@@ -336,17 +338,23 @@ if glob_sysC_valid:
 else:
   ou += 'glob_sysC_valid:      no\n'
   ou += 'gef_mag_mean (um/s):  --------\n'
+ou += '-------------------------------------------------\n'
+
+ou += '\n'
+ou += '\n'
 ou += '\n'
 ou += '-------------------------------------------------\n'
-ou += 'glo1 values:\n'
-ou += 'These are the global means for ats values.  For\n'
-ou += 'each one, there is the number of FOVs used to\n'
-ou += 'calculate the value followed by the value itself.\n'
+ou += 'glob2 values:\n'
+ou += 'These are the global means for ats values.\n'
+ou += 'n*:  n_valid\n'
 ou += '-------------------------------------------------\n'
-ou += glo1_mean_v_mag.ouline1()
-ou += glo1_mean_speed.ouline1()
-ou += glo1_v_align_mag.ouline1()
-ou += glo1_wmean_curv.ouline1()
+ou += '!table_2\n'
+ou += 'name               ; units   ; n*  ;  mean\n'
+ou += '-------------------------------------------------\n'
+ou += glob2_mean_v_mag.ouline1()
+ou += glob2_mean_speed.ouline1()
+ou += glob2_v_align_mag.ouline1()
+ou += glob2_wmean_curv.ouline1()
 ou += '-------------------------------------------------\n'
 ou += '\n'
 fz = open(oudir+'/'+oufname2, 'w')
