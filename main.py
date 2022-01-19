@@ -150,15 +150,20 @@ for i in range(n_fafov):
 # It might be a mean, or a component of a unit vector
 # along another.
 # In this case it's a component.
-glob1_vu_mag = 0.0
-glob1_vu_dir = None
+
+glob1_vu_mag = c_meaner()
+
 for i in range(n_fafov):
-  if fafov[i].n_vela > 0:
-    glob1_vu_mag += fafov[i].sysB_vu_val
-if n_fafov_valid > 0:
-  glob1_vu_mag /= n_fafov_valid
+  glob1_vu_mag.add( fafov[i].sysB_vu_val )
+
+glob1_vu_mag.pro1()
+
+glob1_vu_dir = None   # Values:  {None -1 0 +1}.
+glob1_vu_dir_n_valid = 0
+if glob1_vu_mag.mean != None:
+  glob1_vu_dir_n_valid = glob1_vu_mag.n_valid
   glob1_vu_dir = 1
-  if glob1_vu_mag < 0:  glob1_vu_dir = -1
+  if glob1_vu_mag.mean < 0:  glob1_vu_dir = -1
 # I'm not sure yet but I think I might do the following
 # for glob1_vu_dir:  None for when there are no tracks,
 # 0 for when there are tracks but they don't all go
@@ -190,20 +195,21 @@ else:
 # Find the component of the velocity direction in
 # the global direction as defined by unit vectors.
 # Note it can be negative.
-glob1_v_val = 0.0
+# glob1_v_val = 0.0
+glob1_v_val = c_meaner()
+
 for i in range(n_fafov):
-  if fafov[i].n_vela > 0:
+  if fafov[i].sysB_vel_mean_mag != None:
     mag = fafov[i].sysB_vel_mean_mag
     if fafov[i].sysB_vu_val < 0:  mag *= -1
-    glob1_v_val += mag
-if fafov[i].n_vela > 0:
-  glob1_v_val /= n_fafov_valid
+    glob1_v_val.add( mag )
+
+glob1_v_val.pro1()
 ############################################
 
 
 
 for i in range(n_fafov):
-  ### print("&&> glob1_vu_dir: ", glob1_vu_dir)
   fafov[i].sysC_valid = glob1_sysC_valid
   #
   fafov[i].set_sysC( glob1_vu_dir )
@@ -214,11 +220,11 @@ for i in range(n_fafov):
   fafov[i].pro2()
 
 
-gef_mag_mean = 0.0
-if glob1_sysC_valid:
-  for i in range(n_fafov):
-    gef_mag_mean += fafov[i].gef_mag
-gef_mag_mean /= n_fafov
+gef_mag_mean = c_meaner()
+for i in range(n_fafov):
+  gef_mag_mean.add( fafov[i].gef_mag )
+gef_mag_mean.pro1()
+
 
 
 
@@ -316,30 +322,47 @@ fz.close()
 #######################################################
 
 
+glob1_vu_mag.set_name('glob1_vu_mag', '(1)', 1)
+glob1_vu_mag.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:9.3f}')
+
+glob1_v_val.set_name('glob1_v_val', 'um/s', 1E6)
+glob1_v_val.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:9.3f}')
+
+gef_mag_mean.set_name('gef_mag_mean', 'um/s', 1E6)
+gef_mag_mean.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:9.3f}')
+
+
 #######################################################
 # oufname2 data
 ou = ''
+
+# table 1
 ou += '\n'
 ou += '-------------------------------------------------\n'
 ou += '!table_1\n'
-ou += 'n_fafov:              {0:8d}\n'.format(n_fafov)
-ou += 'n_fafov_valid:        {0:8d}\n'.format(n_fafov_valid)
-if glob1_vu_dir != None:
-  ou += 'glob1_vu_mag (1):      {0:8.3f}\n'.format( glob1_vu_mag )
-  ou += 'glob1_vu_dir (1):      {0:8.3f}\n'.format( glob1_vu_dir )
-  ou += 'glob1_v_val (um/s):    {0:8.3f}\n'.format( glob1_v_val *1E6 ) # m/s->um/s
-else:
-  ou += 'glob1_vu_mag (1):      --------\n'
-  ou += 'glob1_vu_dir (1):      --------\n'
-  ou += 'glob1_v_val (um/s):    --------\n'
+ou += 'n_fafov            ; {0:3d}\n'.format(n_fafov)
+ou += 'n_fafov_valid      ; {0:3d}\n'.format(n_fafov_valid)
+
+
 if glob1_sysC_valid:
-  ou += 'glob1_sysC_valid:      yes\n'
-  ou += 'gef_mag_mean (um/s):  {0:8.3f}\n'.format( gef_mag_mean *1E6 ) # m/s->um/s
+  ou += 'glob1_sysC_valid   ; yes\n'
 else:
-  ou += 'glob1_sysC_valid:      no\n'
-  ou += 'gef_mag_mean (um/s):  --------\n'
+  ou += 'glob1_sysC_valid   ; no\n'
+
+ou += '-------------------\n'
+ou += 'glob1_vu_dir       ; (1)     ; '
+ou += '{0:3d} ; '.format( glob1_vu_dir_n_valid )
+if   glob1_vu_dir != None:
+  ou += '{0:9d}\n'.format(glob1_vu_dir)
+else:
+  ou += '--------\n'
+
+ou += glob1_vu_mag.ouline1()
+ou += glob1_v_val.ouline1()
+ou += gef_mag_mean.ouline1()
 ou += '-------------------------------------------------\n'
 
+# table 2
 ou += '\n'
 ou += '\n'
 ou += '\n'

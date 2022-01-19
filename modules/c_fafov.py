@@ -124,6 +124,9 @@ class c_fafov:
   #
   def pro1(self):
     #
+    self.sysB_vu_val = None
+    self.sysB_vel_mean_mag = None
+    #
     if self.n_vela == 0:  return
     #
     self.vel_mag_max = 0.0
@@ -186,7 +189,9 @@ class c_fafov:
   #
   def pro2(self):  # requires the global direction to be set
     # gef:  globally effective flow.
-    ### print("**> n_vela: ", self.n_vela)
+    #
+    self.gef_mag = None
+    #
     if not self.sysC_valid:  return
     self.gef_mag = np.dot( self.vel_mean, self.sysA_Ce1 )
     self.gef_vel = self.gef_mag * self.sysA_Ce1
