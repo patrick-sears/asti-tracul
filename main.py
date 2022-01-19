@@ -150,64 +150,64 @@ for i in range(n_fafov):
 # It might be a mean, or a component of a unit vector
 # along another.
 # In this case it's a component.
-glob_vu_mag = 0.0
-glob_vu_dir = None
+glob1_vu_mag = 0.0
+glob1_vu_dir = None
 for i in range(n_fafov):
   if fafov[i].n_vela > 0:
-    glob_vu_mag += fafov[i].sysB_vu_val
+    glob1_vu_mag += fafov[i].sysB_vu_val
 if n_fafov_valid > 0:
-  glob_vu_mag /= n_fafov_valid
-  glob_vu_dir = 1
-  if glob_vu_mag < 0:  glob_vu_dir = -1
+  glob1_vu_mag /= n_fafov_valid
+  glob1_vu_dir = 1
+  if glob1_vu_mag < 0:  glob1_vu_dir = -1
 # I'm not sure yet but I think I might do the following
-# for glob_vu_dir:  None for when there are no tracks,
+# for glob1_vu_dir:  None for when there are no tracks,
 # 0 for when there are tracks but they don't all go
 # in the same global direction.
 
 
 
-glob_sysC_valid = True
+glob1_sysC_valid = True
 # The sysC is the basis system of global flow.
 # It is only valid if there is a coordinated global flow.
-# System C must be global.  The glob_ prefix is just
+# System C must be global.  The glob1_ prefix is just
 # here as a reminder that it goes with other global
 # variables.
 
-if glob_vu_dir == None:
-  glob_sysC_valid = False
+if glob1_vu_dir == None:
+  glob1_sysC_valid = False
 else:
   for i in range(n_fafov):
     if fafov[i].n_vela == 0:
-      glob_sysC_valid = False
+      glob1_sysC_valid = False
       break
-    if fafov[i].sysB_vu_val * glob_vu_dir <= 0:
-      # sysB_vu_val and glob_vu_dir have opposite
+    if fafov[i].sysB_vu_val * glob1_vu_dir <= 0:
+      # sysB_vu_val and glob1_vu_dir have opposite
       # signs.  The global direction should only
       # be valid if all FOVs go in the same direction.
-      glob_sysC_valid = False
+      glob1_sysC_valid = False
 
 
 # Find the component of the velocity direction in
 # the global direction as defined by unit vectors.
 # Note it can be negative.
-glob_v_val = 0.0
+glob1_v_val = 0.0
 for i in range(n_fafov):
   if fafov[i].n_vela > 0:
     mag = fafov[i].sysB_vel_mean_mag
     if fafov[i].sysB_vu_val < 0:  mag *= -1
-    glob_v_val += mag
+    glob1_v_val += mag
 if fafov[i].n_vela > 0:
-  glob_v_val /= n_fafov_valid
+  glob1_v_val /= n_fafov_valid
 ############################################
 
 
 
 for i in range(n_fafov):
-  ### print("&&> glob_vu_dir: ", glob_vu_dir)
-  fafov[i].sysC_valid = glob_sysC_valid
+  ### print("&&> glob1_vu_dir: ", glob1_vu_dir)
+  fafov[i].sysC_valid = glob1_sysC_valid
   #
-  fafov[i].set_sysC( glob_vu_dir )
-  # if glob_vu_dir == 1, it's the same as sysB.
+  fafov[i].set_sysC( glob1_vu_dir )
+  # if glob1_vu_dir == 1, it's the same as sysB.
   # If -1, there is a pi rotation of the basis
   # vectors.
   #
@@ -215,7 +215,7 @@ for i in range(n_fafov):
 
 
 gef_mag_mean = 0.0
-if glob_sysC_valid:
+if glob1_sysC_valid:
   for i in range(n_fafov):
     gef_mag_mean += fafov[i].gef_mag
 gef_mag_mean /= n_fafov
@@ -324,19 +324,19 @@ ou += '-------------------------------------------------\n'
 ou += '!table_1\n'
 ou += 'n_fafov:              {0:8d}\n'.format(n_fafov)
 ou += 'n_fafov_valid:        {0:8d}\n'.format(n_fafov_valid)
-if glob_vu_dir != None:
-  ou += 'glob_vu_mag (1):      {0:8.3f}\n'.format( glob_vu_mag )
-  ou += 'glob_vu_dir (1):      {0:8.3f}\n'.format( glob_vu_dir )
-  ou += 'glob_v_val (um/s):    {0:8.3f}\n'.format( glob_v_val *1E6 ) # m/s->um/s
+if glob1_vu_dir != None:
+  ou += 'glob1_vu_mag (1):      {0:8.3f}\n'.format( glob1_vu_mag )
+  ou += 'glob1_vu_dir (1):      {0:8.3f}\n'.format( glob1_vu_dir )
+  ou += 'glob1_v_val (um/s):    {0:8.3f}\n'.format( glob1_v_val *1E6 ) # m/s->um/s
 else:
-  ou += 'glob_vu_mag (1):      --------\n'
-  ou += 'glob_vu_dir (1):      --------\n'
-  ou += 'glob_v_val (um/s):    --------\n'
-if glob_sysC_valid:
-  ou += 'glob_sysC_valid:      yes\n'
+  ou += 'glob1_vu_mag (1):      --------\n'
+  ou += 'glob1_vu_dir (1):      --------\n'
+  ou += 'glob1_v_val (um/s):    --------\n'
+if glob1_sysC_valid:
+  ou += 'glob1_sysC_valid:      yes\n'
   ou += 'gef_mag_mean (um/s):  {0:8.3f}\n'.format( gef_mag_mean *1E6 ) # m/s->um/s
 else:
-  ou += 'glob_sysC_valid:      no\n'
+  ou += 'glob1_sysC_valid:      no\n'
   ou += 'gef_mag_mean (um/s):  --------\n'
 ou += '-------------------------------------------------\n'
 
