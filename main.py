@@ -3,6 +3,7 @@
 from modules.loshape import *
 from modules.c_fafov import c_fafov
 from modules import funb
+from modules.c_meaner import c_meaner
 
 import sys
 from matplotlib import pyplot as plt
@@ -223,38 +224,33 @@ gef_mag_mean /= n_fafov
 
 #######################################################
 # glo1:  global mean values derived from ats data
-glo1_mean_v_mag = 0
-glo1_mean_speed = 0
-glo1_v_align_mag = 0
-glo1_wmean_curv = 0
 
-n_glo1_mean_v_mag = 0
-n_glo1_mean_speed = 0
-n_glo1_v_align_mag = 0
-n_glo1_wmean_curv = 0
+glo1_mean_v_mag = c_meaner()
+glo1_mean_speed = c_meaner()
+glo1_v_align_mag = c_meaner()
+glo1_wmean_curv = c_meaner()
 
 for i in range(n_fafov):
-  if fafov[i].ats_mean_v_mag != None:
-    glo1_mean_v_mag += fafov[i].ats_mean_v_mag
-    n_glo1_mean_v_mag += 1
-  if fafov[i].ats_mean_speed != None:
-    glo1_mean_speed += fafov[i].ats_mean_speed
-    n_glo1_mean_speed += 1
-  if fafov[i].ats_v_align_mag != None:
-    glo1_v_align_mag += fafov[i].ats_v_align_mag
-    n_glo1_v_align_mag += 1
-  if fafov[i].ats_wmean_curv != None:
-    glo1_wmean_curv += fafov[i].ats_wmean_curv
-    n_glo1_wmean_curv += 1
+  glo1_mean_v_mag.add( fafov[i].ats_mean_v_mag )
+  glo1_mean_speed.add( fafov[i].ats_mean_speed )
+  glo1_v_align_mag.add( fafov[i].ats_v_align_mag )
+  glo1_wmean_curv.add( fafov[i].ats_wmean_curv )
 
-if n_glo1_mean_v_mag == 0:  glo1_mean_v_mag = None
-else:                       glo1_mean_v_mag /= n_glo1_mean_v_mag
-if n_glo1_mean_speed == 0:  glo1_mean_speed = None
-else:                       glo1_mean_speed /= n_glo1_mean_speed
-if n_glo1_v_align_mag == 0:  glo1_v_align_mag = None
-else:                       glo1_v_align_mag /= n_glo1_v_align_mag
-if n_glo1_wmean_curv == 0:  glo1_wmean_curv = None
-else:                       glo1_wmean_curv /= n_glo1_wmean_curv
+glo1_mean_v_mag.pro1()
+glo1_mean_v_mag.set_name('glo1_mean_v_mag', 'um/s', 1E6)
+glo1_mean_v_mag.set_form(' ; ', '{0:16}', '{0:7}', '{0:3d}', '{0:9.3f}')
+
+glo1_mean_speed.pro1()
+glo1_mean_speed.set_name('glo1_mean_speed', 'um/s', 1E6)
+glo1_mean_speed.set_form(' ; ', '{0:16}', '{0:7}', '{0:3d}', '{0:9.3f}')
+
+glo1_v_align_mag.pro1()
+glo1_v_align_mag.set_name('glo1_v_align_mag', '1', 1)
+glo1_v_align_mag.set_form(' ; ', '{0:16}', '{0:7}', '{0:3d}', '{0:9.3f}')
+
+glo1_wmean_curv.pro1()
+glo1_wmean_curv.set_name('glo1_wmean_curv', 'um^-1', 1E-6)
+glo1_wmean_curv.set_form(' ; ', '{0:16}', '{0:7}', '{0:3d}', '{0:9.3f}')
 #######################################################
 
 
@@ -347,25 +343,16 @@ ou += 'These are the global means for ats values.  For\n'
 ou += 'each one, there is the number of FOVs used to\n'
 ou += 'calculate the value followed by the value itself.\n'
 ou += '-------------------------------------------------\n'
-form1 = '{0:8.3f}'
-ou += 'glo1_mean_v_mag  :    um/s :  {0:3d}'.format(n_glo1_mean_v_mag)
-ou += funb.oufloat(form1, glo1_mean_v_mag, 1E6)+'\n'
-ou += 'glo1_mean_speed  :    um/s :  {0:3d}'.format(n_glo1_mean_speed)
-ou += funb.oufloat(form1, glo1_mean_speed, 1E6)+'\n'
-ou += 'glo1_v_align_mag :       1 :  {0:3d}'.format(n_glo1_v_align_mag)
-ou += funb.oufloat(form1, glo1_v_align_mag, 1)+'\n'
-ou += 'glo1_wmean_curv  : um^{-1} :'+'  {0:3d}'.format(n_glo1_wmean_curv)
-ou += funb.oufloat(form1, glo1_wmean_curv, 1E-6)+'\n'
+ou += glo1_mean_v_mag.ouline1()
+ou += glo1_mean_speed.ouline1()
+ou += glo1_v_align_mag.ouline1()
+ou += glo1_wmean_curv.ouline1()
 ou += '-------------------------------------------------\n'
-
 ou += '\n'
 fz = open(oudir+'/'+oufname2, 'w')
 fz.write(ou)
 fz.close()
 #######################################################
-glo1_mean_speed = 0
-glo1_v_align_mag = 0
-glo1_wmean_curv = 0
 
 
 
