@@ -2,6 +2,7 @@
 
 from modules.loshape import *
 from modules.c_fafov import c_fafov
+from modules import funb
 
 import sys
 from matplotlib import pyplot as plt
@@ -247,9 +248,13 @@ for i in range(n_fafov):
     n_glo1_wmean_curv += 1
 
 if n_glo1_mean_v_mag == 0:  glo1_mean_v_mag = None
+else:                       glo1_mean_v_mag /= n_glo1_mean_v_mag
 if n_glo1_mean_speed == 0:  glo1_mean_speed = None
+else:                       glo1_mean_speed /= n_glo1_mean_speed
 if n_glo1_v_align_mag == 0:  glo1_v_align_mag = None
+else:                       glo1_v_align_mag /= n_glo1_v_align_mag
 if n_glo1_wmean_curv == 0:  glo1_wmean_curv = None
+else:                       glo1_wmean_curv /= n_glo1_wmean_curv
 #######################################################
 
 
@@ -336,10 +341,31 @@ else:
   ou += 'glob_sysC_valid:      no\n'
   ou += 'gef_mag_mean (um/s):  --------\n'
 ou += '\n'
+ou += '-------------------------------------------------\n'
+ou += 'glo1 values:\n'
+ou += 'These are the global means for ats values.  For\n'
+ou += 'each one, there is the number of FOVs used to\n'
+ou += 'calculate the value followed by the value itself.\n'
+ou += '-------------------------------------------------\n'
+form1 = '{0:8.3f}'
+ou += 'glo1_mean_v_mag  :    um/s :  {0:3d}'.format(n_glo1_mean_v_mag)
+ou += funb.oufloat(form1, glo1_mean_v_mag, 1E6)+'\n'
+ou += 'glo1_mean_speed  :    um/s :  {0:3d}'.format(n_glo1_mean_speed)
+ou += funb.oufloat(form1, glo1_mean_speed, 1E6)+'\n'
+ou += 'glo1_v_align_mag :       1 :  {0:3d}'.format(n_glo1_v_align_mag)
+ou += funb.oufloat(form1, glo1_v_align_mag, 1)+'\n'
+ou += 'glo1_wmean_curv  : um^{-1} :'+'  {0:3d}'.format(n_glo1_wmean_curv)
+ou += funb.oufloat(form1, glo1_wmean_curv, 1E-6)+'\n'
+ou += '-------------------------------------------------\n'
+
+ou += '\n'
 fz = open(oudir+'/'+oufname2, 'w')
 fz.write(ou)
 fz.close()
 #######################################################
+glo1_mean_speed = 0
+glo1_v_align_mag = 0
+glo1_wmean_curv = 0
 
 
 
