@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from modules import fun
+from modules import funb
 
 import os
 import numpy as np
@@ -190,17 +191,6 @@ class c_fafov:
     self.gef_mag = np.dot( self.vel_mean, self.sysA_Ce1 )
     self.gef_vel = self.gef_mag * self.sysA_Ce1
   #
-  def oufloat(self, form, val, mult=1):
-    # Handles the case when a float is None.
-    # Example using from = '{0:8.3}'
-    mm = form.split(':')     # mm  = [ '{0', '8.3}' ]
-    mma = mm[1].split('.')   # mma = [ '8',  '3}' ]
-    length = int( mma[0] )   # length = 8
-    ou = ''
-    if val == None:   ou += '-'*length
-    else:             ou += form.format( val*mult )
-    return ou
-  #
   def ouline1(self):
     ou = ''
     if self.n_vela > 0:
@@ -226,10 +216,10 @@ class c_fafov:
   def ouline3(self):
     form1 = '{0:8.3f}'
     ou = ''
-    ou += '  '+self.oufloat( form1, self.ats_mean_v_mag, 1E6 )
-    ou += '  '+self.oufloat( form1, self.ats_mean_speed, 1E6 )
-    ou += '  '+self.oufloat( form1, self.ats_v_align_mag, 1 )
-    ou += '  '+self.oufloat( form1, self.ats_wmean_curv, 1E-6 )
+    ou += '  '+funb.oufloat( form1, self.ats_mean_v_mag, 1E6 )
+    ou += '  '+funb.oufloat( form1, self.ats_mean_speed, 1E6 )
+    ou += '  '+funb.oufloat( form1, self.ats_v_align_mag, 1 )
+    ou += '  '+funb.oufloat( form1, self.ats_wmean_curv, 1E-6 )
     #
     return ou
   #

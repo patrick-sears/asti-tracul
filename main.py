@@ -220,6 +220,44 @@ gef_mag_mean /= n_fafov
 
 
 
+#######################################################
+# glo1:  global mean values derived from ats data
+glo1_mean_v_mag = 0
+glo1_mean_speed = 0
+glo1_v_align_mag = 0
+glo1_wmean_curv = 0
+
+n_glo1_mean_v_mag = 0
+n_glo1_mean_speed = 0
+n_glo1_v_align_mag = 0
+n_glo1_wmean_curv = 0
+
+for i in range(n_fafov):
+  if fafov[i].ats_mean_v_mag != None:
+    glo1_mean_v_mag += fafov[i].ats_mean_v_mag
+    n_glo1_mean_v_mag += 1
+  if fafov[i].ats_mean_speed != None:
+    glo1_mean_speed += fafov[i].ats_mean_speed
+    n_glo1_mean_speed += 1
+  if fafov[i].ats_v_align_mag != None:
+    glo1_v_align_mag += fafov[i].ats_v_align_mag
+    n_glo1_v_align_mag += 1
+  if fafov[i].ats_wmean_curv != None:
+    glo1_wmean_curv += fafov[i].ats_wmean_curv
+    n_glo1_wmean_curv += 1
+
+if n_glo1_mean_v_mag == 0:  glo1_mean_v_mag = None
+if n_glo1_mean_speed == 0:  glo1_mean_speed = None
+if n_glo1_v_align_mag == 0:  glo1_v_align_mag = None
+if n_glo1_wmean_curv == 0:  glo1_wmean_curv = None
+#######################################################
+
+
+
+
+##################################################################
+##################################################################
+##################################################################
 print("Saving output...")
 
 #######################################################
