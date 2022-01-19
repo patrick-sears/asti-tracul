@@ -190,6 +190,17 @@ class c_fafov:
     self.gef_mag = np.dot( self.vel_mean, self.sysA_Ce1 )
     self.gef_vel = self.gef_mag * self.sysA_Ce1
   #
+  def oufloat(self, form, val, mult=1):
+    # Handles the case when a float is None.
+    # Example using from = '{0:8.3}'
+    mm = form.split(':')     # mm  = [ '{0', '8.3}' ]
+    mma = mm[1].split('.')   # mma = [ '8',  '3}' ]
+    length = int( mma[0] )   # length = 8
+    ou = ''
+    if val == None:   ou += '-'*length
+    else:             ou += form.format( val*mult )
+    return ou
+  #
   def ouline1(self):
     ou = ''
     if self.n_vela > 0:
@@ -212,16 +223,6 @@ class c_fafov:
         ou += '  --------'
     return ou
   #
-  def oufloat(self, form, val, mult=1):
-    # Handles the case when a float is None.
-    mm = form.split(':')
-    mma = mm[1].split('.')
-    length = int( mma[0] )
-    ou = ''
-    if val == None:   ou += '-'*length
-    else:             ou += form.format( val*mult )
-    return ou
-  #
   def ouline3(self):
     form1 = '{0:8.3f}'
     ou = ''
@@ -230,14 +231,6 @@ class c_fafov:
     ou += '  '+self.oufloat( form1, self.ats_v_align_mag, 1 )
     ou += '  '+self.oufloat( form1, self.ats_wmean_curv, 1E-6 )
     #
-    ### if self.n_vela > 0:
-    ###   ou += '  {0:8.3f}'.format( self.ats_mean_v_mag * 1E6 )
-    ###   ou += '  {0:8.3f}'.format( self.ats_mean_speed * 1E6 )
-    ###   ou += '  {0:8.3f}'.format( self.ats_v_align_mag )
-    ###   ou += '  {0:8.3f}'.format( self.ats_wmean_curv * 1E-6 )
-    ### else:
-    ###   for i in range(1):
-    ###     ou += '  --------'
     return ou
   #
   def plot_vecs_on_layout(self):
