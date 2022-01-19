@@ -22,6 +22,7 @@ for l in f:
   if key == '!run_name':  run_name = ll[1]
   elif key == '!cul_name':  cul_name = ll[1]
   elif key == '!dir_traspe_1':  dir_traspe_1 = ll[1]
+  elif key == '!dir_traspe_2':  dir_traspe_2 = ll[1]
   elif key == '!oudir':  oudir = ll[1]
   elif key == '!oufname1':  oufname1 = ll[1]
   elif key == '!oufname2':  oufname2 = ll[1]
@@ -121,10 +122,13 @@ for i in range(n_fafov):
   fafov[i].sbar_x1 = vovg_sbar_x1
   fafov[i].sbar_y1 = vovg_sbar_y1
   #
-  fafov[i].set_dir_traspe_1(dir_traspe_1)
+  fafov[i].set_dir_traspe(dir_traspe_1, dir_traspe_2)
   fafov[i].set_scale_fov_to_layout(scale_fov_to_layout)
   fafov[i].set_vovg_scale(vovg_scale)
+  #
+  # This is loaded from the traspe output files.
   fafov[i].load_vecs()
+  fafov[i].load_ats_data()
   #
   fafov[i].pro1()
 
@@ -228,6 +232,7 @@ ou += 'vel_mag:  vel_mean_mag, the mag of the mean vel.\n'
 ou += 'sysB_mag:  sysB_vel_mean_mag, should be same as vel_mag.\n'
 ou += 'sysB_vuv:  sysB_vu_val\n'
 ou += '-----------------------\n'
+ou += '!data_table_1\n'  # This will be useful for external files reading.
 ou += 'i    mean_ux   mean_uy   vel_mag   sysB_mag  sysB_vuv\n'
 ou += '---  --------  --------  --------  --------  --------\n'
 for i in range(n_fafov):
@@ -236,9 +241,11 @@ for i in range(n_fafov):
   ou += '\n'
 ou += '-----------------------------------------------------\n'
 ou += '\n\n\n'
+#################
 ou += '-----------------------------------------------------\n'
 ou += 'gef_mag (um/s)\n'
 ou += '-----------------------\n'
+ou += '!data_table_2\n'  # This will be useful for external files reading.
 ou += 'i    gef_mag\n'
 ou += '---  --------  --------  --------  --------  --------\n'
 for i in range(n_fafov):
@@ -247,6 +254,23 @@ for i in range(n_fafov):
   ou += '\n'
 ou += '-----------------------------------------------------\n'
 ou += '\n\n\n'
+#################
+ou += '-----------------------------------------------------\n'
+ou += 'v_mag:    ats_mean_v_mag (um/s)\n'
+ou += 'speed:    ats_mean_speed (um/s)\n'
+ou += 'ali_mag:  ats_v_align_mag (1)\n'
+ou += 'wm_curv:  ats_wmean_curv (um^{-1})\n'
+ou += '-----------------------\n'
+ou += '!data_table_3 - traspe ats data\n'
+ou += 'i    v_mag     speed     ali_mag   wm_curv\n'
+ou += '---  --------  --------  --------  --------  --------\n'
+for i in range(n_fafov):
+  ou += '{0:3d}'.format(i)
+  ou += fafov[i].ouline3()
+  ou += '\n'
+ou += '-----------------------------------------------------\n'
+ou += '\n\n\n'
+#################
 fz = open(oudir+'/'+oufname1, 'w')
 fz.write(ou)
 fz.close()
@@ -320,7 +344,7 @@ plt.savefig(oudir+'/'+oufname_g1, bbox_inches='tight')
 
 ##################################################################
 ### !graph #######################################################
-# Graph 1 -- The layout by itself.  g1b
+# Graph 1b -- The layout by itself.  g1b
 if use_g1b:
   plt.clf()
   fig = plt.figure()

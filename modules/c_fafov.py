@@ -42,8 +42,9 @@ class c_fafov:
     self.mocBA = fun.MoC(e1, e2, self.sysA_Be1, self.sysA_Be2)
     #
   #
-  def set_dir_traspe_1(self, dir):
-    self.dir_traspe_1 = dir
+  def set_dir_traspe(self, dir1, dir2):
+    self.dir_traspe_1 = dir1
+    self.dir_traspe_2 = dir2
   #
   def set_scale_fov_to_layout(self, scale):
     self.scale_fov_to_layout = scale
@@ -78,6 +79,47 @@ class c_fafov:
       self.vela.append( np.array( vel ) )
     f.close()
     self.n_vela = len(self.vela)
+  #
+  def load_ats_data(self):
+    # These are the traspe "all track summary" data.
+    #
+    self.ats_mean_v_mag = None
+    self.ats_mean_speed = None
+    self.ats_v_align_mag = None
+    self.ats_wmean_curv = None
+    #
+    fname = self.dir_traspe_2 + '/' + self.vidname + '.data'
+    if not os.path.isfile( fname ):
+      # Assume this FOV has no tracks.
+      return
+    #
+    ######################################
+    # Input units: um/s, um^-1.
+    # convert to SI base units.
+    # huiu:  human units to internal units
+    huiu1 = 1E-6    # hu = um/s or um, iu = m/s or m.
+    huiu2 = 1E6     # hu = um^-1, iu = m^-1
+    #
+    f = open(fname)
+    for l in f:
+      l = l.strip()
+      if len(l) == 0:  continue
+      lla = l.split(':')
+      llb = lla[0].split(' ')
+      ###
+      key = llb[0].strip()
+      val = float( lla[1].strip() )
+      ###
+      if key == 'ats_mean_v_mag':
+        self.ats_mean_v_mag = val * huiu1
+      elif key == 'ats_mean_speed':
+        self.ats_mean_speed = val * huiu1
+      elif key == 'ats_v_align_mag':
+        self.ats_v_align_mag = val
+      elif key == 'ats_wmean_curv':
+        self.ats_wmean_curv = val * huiu2
+      ###
+    f.close()
   #
   def pro1(self):
     #
@@ -168,6 +210,34 @@ class c_fafov:
     else:
       for i in range(1):
         ou += '  --------'
+    return ou
+  #
+  def oufloat(self, form, val, mult=1):
+    # Handles the case when a float is None.
+    mm = form.split(':')
+    mma = mm[1].split('.')
+    length = int( mma[0] )
+    ou = ''
+    if val == None:   ou += '-'*length
+    else:             ou += form.format( val*mult )
+    return ou
+  #
+  def ouline3(self):
+    form1 = '{0:8.3f}'
+    ou = ''
+    ou += '  '+self.oufloat( form1, self.ats_mean_v_mag, 1E6 )
+    ou += '  '+self.oufloat( form1, self.ats_mean_speed, 1E6 )
+    ou += '  '+self.oufloat( form1, self.ats_v_align_mag, 1 )
+    ou += '  '+self.oufloat( form1, self.ats_wmean_curv, 1E-6 )
+    #
+    ### if self.n_vela > 0:
+    ###   ou += '  {0:8.3f}'.format( self.ats_mean_v_mag * 1E6 )
+    ###   ou += '  {0:8.3f}'.format( self.ats_mean_speed * 1E6 )
+    ###   ou += '  {0:8.3f}'.format( self.ats_v_align_mag )
+    ###   ou += '  {0:8.3f}'.format( self.ats_wmean_curv * 1E-6 )
+    ### else:
+    ###   for i in range(1):
+    ###     ou += '  --------'
     return ou
   #
   def plot_vecs_on_layout(self):
