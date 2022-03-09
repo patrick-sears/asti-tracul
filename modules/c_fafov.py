@@ -209,31 +209,34 @@ class c_fafov:
     self.gef_vel = self.gef_mag * self.sysA_Ce1
   #
   def ouline1(self):
+    # {0:11.6f}   -xxx.yyyyyy
+    #             012345678901
+    #            00         10
     ou = ''
     if self.n_vela > 0:
-      ou += '  {0:8.5f}'.format( self.vel_mean_u[0] )
-      ou += '  {0:8.5f}'.format( self.vel_mean_u[1] )
-      ou += '  {0:8.3f}'.format( self.vel_mean_mag *1E6 ) # m/s->um/s
-      ou += '  {0:8.3f}'.format( self.sysB_vel_mean_mag *1E6 ) # m/s->um/s
-      ou += '  {0:8.3f}'.format( self.sysB_vu_val )
+      ou += '  {0:11.6f}'.format( self.vel_mean_u[0] )
+      ou += '  {0:11.6f}'.format( self.vel_mean_u[1] )
+      ou += '  {0:11.6f}'.format( self.vel_mean_mag *1E6 ) # m/s->um/s
+      ou += '  {0:11.6f}'.format( self.sysB_vel_mean_mag *1E6 ) # m/s->um/s
+      ou += '  {0:11.6f}'.format( self.sysB_vu_val )
     else:
       for i in range(5):
         # ou += '  --------'
-        ou += '  {0:8.3f}'.format( float('nan') )
+        ou += '  {0:11.6f}'.format( float('nan') )
     return ou
   #
   def ouline2(self):
     ou = ''
     if self.sysC_valid:
-      ou += '  {0:8.3f}'.format( self.gef_mag * 1E6)
+      ou += '  {0:11.6f}'.format( self.gef_mag * 1E6)
     else:
       for i in range(1):
         # ou += '  --------'
-        ou += '  {0:8.3f}'.format( float('nan') )
+        ou += '  {0:11.6f}'.format( float('nan') )
     return ou
   #
   def ouline3(self):
-    form1 = '{0:8.3f}'
+    form1 = '{0:11.6f}'
     ou = ''
     ou += '  '+funb.oufloat( form1, self.ats_mean_v_mag, 1E6 )
     ou += '  '+funb.oufloat( form1, self.ats_mean_speed, 1E6 )

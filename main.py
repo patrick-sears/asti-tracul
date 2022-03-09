@@ -246,19 +246,19 @@ for i in range(n_fafov):
 
 glob2_mean_v_mag.pro1()
 glob2_mean_v_mag.set_name('glob2_mean_v_mag', 'um/s', 1E6)
-glob2_mean_v_mag.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:9.3f}')
+glob2_mean_v_mag.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:11.6f}')
 
 glob2_mean_speed.pro1()
 glob2_mean_speed.set_name('glob2_mean_speed', 'um/s', 1E6)
-glob2_mean_speed.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:9.3f}')
+glob2_mean_speed.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:11.6f}')
 
 glob2_v_align_mag.pro1()
 glob2_v_align_mag.set_name('glob2_v_align_mag', '1', 1)
-glob2_v_align_mag.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:9.3f}')
+glob2_v_align_mag.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:11.6f}')
 
 glob2_wmean_curv.pro1()
 glob2_wmean_curv.set_name('glob2_wmean_curv', 'um^-1', 1E-6)
-glob2_wmean_curv.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:9.3f}')
+glob2_wmean_curv.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:11.6f}')
 #######################################################
 
 
@@ -272,7 +272,7 @@ print("Saving output...")
 #######################################################
 # oufname1 data
 ou = ''
-ou += '-----------------------------------------------------\n'
+ou += '--------------------------------------------------------------------\n'
 ou += 'i: i_fov,\n'
 ou += 'mean_ux mean_uy:  vel_mean_u{x y}\n'
 ou += 'vel_mag:  vel_mean_mag, the mag of the mean vel.\n'
@@ -280,42 +280,42 @@ ou += 'sysB_mag:  sysB_vel_mean_mag, should be same as vel_mag.\n'
 ou += 'sysB_vuv:  sysB_vu_val\n'
 ou += '-----------------------\n'
 ou += '!data_table_1\n'  # This will be useful for external files reading.
-ou += 'i    mean_ux   mean_uy   vel_mag   sysB_mag  sysB_vuv\n'
-ou += '---  --------  --------  --------  --------  --------\n'
+ou += 'i    mean_ux      mean_uy      vel_mag      sysB_mag     sysB_vuv\n'
+ou += '---  -----------  -----------  -----------  -----------  -----------\n'
 for i in range(n_fafov):
   ou += '{0:3d}'.format(i)
   ou += fafov[i].ouline1()
   ou += '\n'
-ou += '-----------------------------------------------------\n'
+ou += '--------------------------------------------------------------------\n'
 ou += '\n\n\n'
 #################
-ou += '-----------------------------------------------------\n'
+ou += '--------------------------------------------------------------------\n'
 ou += 'gef_mag (um/s)\n'
 ou += '-----------------------\n'
 ou += '!data_table_2\n'  # This will be useful for external files reading.
 ou += 'i    gef_mag\n'
-ou += '---  --------  --------  --------  --------  --------\n'
+ou += '---  -----------  -----------  -----------  -----------  -----------\n'
 for i in range(n_fafov):
   ou += '{0:3d}'.format(i)
   ou += fafov[i].ouline2()
   ou += '\n'
-ou += '-----------------------------------------------------\n'
+ou += '--------------------------------------------------------------------\n'
 ou += '\n\n\n'
 #################
-ou += '-----------------------------------------------------\n'
+ou += '--------------------------------------------------------------------\n'
 ou += 'v_mag:    ats_mean_v_mag (um/s)\n'
 ou += 'speed:    ats_mean_speed (um/s)\n'
 ou += 'ali_mag:  ats_v_align_mag (1)\n'
 ou += 'wm_curv:  ats_wmean_curv (um^{-1})\n'
 ou += '-----------------------\n'
 ou += '!data_table_3 - traspe ats data\n'
-ou += 'i    v_mag     speed     ali_mag   wm_curv\n'
-ou += '---  --------  --------  --------  --------  --------\n'
+ou += 'i    v_mag        speed        ali_mag      wm_curv\n'
+ou += '---  -----------  -----------  -----------  -----------  -----------\n'
 for i in range(n_fafov):
   ou += '{0:3d}'.format(i)
   ou += fafov[i].ouline3()
   ou += '\n'
-ou += '-----------------------------------------------------\n'
+ou += '--------------------------------------------------------------------\n'
 ou += '\n\n\n'
 #################
 fz = open(oudir+'/'+oufname1, 'w')
@@ -325,13 +325,13 @@ fz.close()
 
 
 glob1_vu_mag.set_name('glob1_vu_mag', '(1)', 1)
-glob1_vu_mag.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:9.3f}')
+glob1_vu_mag.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:11.6f}')
 
 glob1_v_val.set_name('glob1_v_val', 'um/s', 1E6)
-glob1_v_val.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:9.3f}')
+glob1_v_val.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:11.6f}')
 
 gef_mag_mean.set_name('gef_mag_mean', 'um/s', 1E6)
-gef_mag_mean.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:9.3f}')
+gef_mag_mean.set_form(' ; ', '{0:18}', '{0:7}', '{0:3d}', '{0:11.6f}')
 
 
 #######################################################
@@ -355,7 +355,7 @@ ou += '-------------------\n'
 ou += 'glob1_vu_dir       ; (1)     ; '
 ou += '{0:3d} ; '.format( glob1_vu_dir_n_valid )
 if   glob1_vu_dir != None:
-  ou += '{0:9d}\n'.format(glob1_vu_dir)
+  ou += '{0:11d}\n'.format(glob1_vu_dir)
 else:
   ou += '--------\n'
 
