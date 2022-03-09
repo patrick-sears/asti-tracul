@@ -92,6 +92,7 @@ class c_fafov:
     ### self.ats_v_align_mag = None
     ### self.ats_wmean_curv = None
     #
+    self.n_track = 0
     self.ats_mean_v_mag = float('nan')
     self.ats_mean_speed = float('nan')
     self.ats_v_align_mag = float('nan')
@@ -109,6 +110,7 @@ class c_fafov:
     huiu1 = 1E-6    # hu = um/s or um, iu = m/s or m.
     huiu2 = 1E6     # hu = um^-1, iu = m^-1
     #
+    #
     f = open(fname)
     for l in f:
       l = l.strip()
@@ -119,7 +121,9 @@ class c_fafov:
       key = llb[0].strip()
       val = float( lla[1].strip() )
       ###
-      if key == 'ats_mean_v_mag':
+      if key == 'n_track':
+        self.n_track = int( lla[1].strip() )
+      elif key == 'ats_mean_v_mag':
         self.ats_mean_v_mag = val * huiu1
       elif key == 'ats_mean_speed':
         self.ats_mean_speed = val * huiu1
@@ -227,6 +231,8 @@ class c_fafov:
   #
   def ouline2(self):
     ou = ''
+    ou += '  {0:11d}'.format(self.vid)
+    ou += '  {0:11d}'.format(self.n_track)
     if self.sysC_valid:
       ou += '  {0:11.6f}'.format( self.gef_mag * 1E6)
     else:

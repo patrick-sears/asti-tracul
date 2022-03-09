@@ -293,7 +293,7 @@ ou += '--------------------------------------------------------------------\n'
 ou += 'gef_mag (um/s)\n'
 ou += '-----------------------\n'
 ou += '!data_table_2\n'  # This will be useful for external files reading.
-ou += 'i    gef_mag\n'
+ou += 'i    vid          n_track      gef_mag\n'
 ou += '---  -----------  -----------  -----------  -----------  -----------\n'
 for i in range(n_fafov):
   ou += '{0:3d}'.format(i)
