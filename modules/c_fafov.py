@@ -87,10 +87,15 @@ class c_fafov:
   def load_ats_data(self):
     # These are the traspe "all track summary" data.
     #
-    self.ats_mean_v_mag = None
-    self.ats_mean_speed = None
-    self.ats_v_align_mag = None
-    self.ats_wmean_curv = None
+    ### self.ats_mean_v_mag = None
+    ### self.ats_mean_speed = None
+    ### self.ats_v_align_mag = None
+    ### self.ats_wmean_curv = None
+    #
+    self.ats_mean_v_mag = float('nan')
+    self.ats_mean_speed = float('nan')
+    self.ats_v_align_mag = float('nan')
+    self.ats_wmean_curv = float('nan')
     #
     fname = self.dir_traspe_2 + '/' + self.vidname + '.data'
     if not os.path.isfile( fname ):
@@ -127,8 +132,11 @@ class c_fafov:
   #
   def pro1(self):
     #
-    self.sysB_vu_val = None
-    self.sysB_vel_mean_mag = None
+    ### self.sysB_vu_val = None
+    ### self.sysB_vel_mean_mag = None
+    # 
+    self.sysB_vu_val = float('nan')
+    self.sysB_vel_mean_mag = float('nan')
     #
     if self.n_vela == 0:  return
     #
@@ -193,7 +201,8 @@ class c_fafov:
   def pro2(self):  # requires the global direction to be set
     # gef:  globally effective flow.
     #
-    self.gef_mag = None
+    ### self.gef_mag = None
+    self.gef_mag = float('nan')
     #
     if not self.sysC_valid:  return
     self.gef_mag = np.dot( self.vel_mean, self.sysA_Ce1 )
@@ -209,7 +218,8 @@ class c_fafov:
       ou += '  {0:8.3f}'.format( self.sysB_vu_val )
     else:
       for i in range(5):
-        ou += '  --------'
+        # ou += '  --------'
+        ou += '  {0:8.3f}'.format( float('nan') )
     return ou
   #
   def ouline2(self):
@@ -218,7 +228,8 @@ class c_fafov:
       ou += '  {0:8.3f}'.format( self.gef_mag * 1E6)
     else:
       for i in range(1):
-        ou += '  --------'
+        # ou += '  --------'
+        ou += '  {0:8.3f}'.format( float('nan') )
     return ou
   #
   def ouline3(self):
