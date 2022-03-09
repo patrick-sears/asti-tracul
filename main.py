@@ -6,6 +6,8 @@ from modules import funb
 from modules.c_meaner import c_meaner
 
 import sys
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 
 

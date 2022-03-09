@@ -5,8 +5,11 @@ from modules import funb
 
 import os
 import numpy as np
-from matplotlib import pyplot as plt
 import math
+
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
 
 
 ##################################################################

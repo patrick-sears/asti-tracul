@@ -3,9 +3,12 @@
 from modules import fun
 
 import numpy as np
-from matplotlib import pyplot as plt
 import sys
 import math
+
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
 
 # loshape:  layout shapes.
 
