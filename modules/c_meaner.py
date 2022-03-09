@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 
-
+import math
 
 
 ##################################################################
@@ -19,10 +19,12 @@ class c_meaner:
     self.mean = 0
     for v in self.x:
       if v == None:  continue
+      if math.isnan( v ):  continue
       self.mean += v
       self.n_valid += 1
     if self.n_valid == 0:
-      self.mean = None
+      # self.mean = None
+      self.mean = float('nan')
     else:
       self.mean /= self.n_valid
   #
@@ -41,8 +43,6 @@ class c_meaner:
     # Example using from = '{0:8.3f}'
     mm = form4.split(':')     # mm  = [ '{0', '8.3f}' ]
     mma = mm[1].split('.')   # mma = [ '8',  '3f}' ]
-    length = int( mma[0] )   # length = 8
-    self.ou_for_none = '-' * length
   #
   def ouline1(self):
     ou = ''
@@ -52,10 +52,8 @@ class c_meaner:
     ou += self.delim
     ou += self.form3.format(self.n_valid)
     ou += self.delim
-    if self.mean == None:  ou += self.ou_for_none
-    else:
-      ou_mean = self.mean * self.ou_units_mult
-      ou += self.form4.format(ou_mean)
+    ou_mean = self.mean * self.ou_units_mult
+    ou += self.form4.format(ou_mean)
     ou += '\n'
     return ou
   #
